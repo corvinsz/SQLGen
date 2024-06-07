@@ -22,5 +22,22 @@ public partial class TableControl : UserControl
     public TableControl()
     {
         InitializeComponent();
+        Columns = Enumerable.Range(1, 6).ToList();
+        DataContext = this;
+    }
+
+    public List<int> Columns { get; }
+
+    private void ResizeThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        if (Card is not null)
+        {
+            double newWidth = Card.Width + e.HorizontalChange;
+            double newHeight = Card.Height + e.VerticalChange;
+
+            // Set new width and height with minimum constraints
+            Card.Width = newWidth > 0 ? newWidth : 0;
+            Card.Height = newHeight > 0 ? newHeight : 0;
+        }
     }
 }

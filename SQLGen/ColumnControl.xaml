@@ -11,16 +11,26 @@
     <DockPanel>
         <Border Width="40"
                 Height="40"
-                Background="DarkSlateGray"
+                Margin="5,0,5,0"
+                Padding="0"
+                Background="DarkGray"
                 DockPanel.Dock="Right">
-            <materialDesign:PackIcon Margin="4" Kind="Key" />
+            <materialDesign:PackIcon HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Kind="KeyLink" />
         </Border>
         <Border Width="40"
                 Height="40"
-                Background="DarkGray"
+                Margin="20,0,0,0"
+                Background="DarkSlateGray"
                 DockPanel.Dock="Right">
-            <materialDesign:PackIcon Margin="4" Kind="KeyLink" />
+            <materialDesign:PackIcon HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Kind="Key" />
         </Border>
-        <TextBlock DockPanel.Dock="Left" Text="ID" />
+
+        <TextBlock VerticalAlignment="Center"
+                   DockPanel.Dock="Left"
+                   Text="Bezeichnung" />
     </DockPanel>
 </UserControl>

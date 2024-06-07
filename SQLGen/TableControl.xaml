@@ -1,24 +1,38 @@
 ﻿<UserControl x:Class="SQLGen.TableControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SQLGen"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <materialDesign:Card>
-        <DockPanel>
-            <TextBlock Text="Header" DockPanel.Dock="Top"/>
-
-            <ListBox ItemsSource="{Binding Columns}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            
-        </DockPanel>
-    </materialDesign:Card>
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Grid Width="250" Height="300">
+        <materialDesign:Card x:Name="Card" Padding="5">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                           Text="Header" />
+                <ListBox ItemsSource="{Binding Columns}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:ColumnControl />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </materialDesign:Card>
+        <Thumb x:Name="ResizeThumb"
+               Width="10"
+               Height="10"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom"
+               Cursor="SizeNWSE"
+               DragDelta="ResizeThumb_DragDelta">
+            <Thumb.Template>
+                <ControlTemplate>
+                    <Rectangle Fill="Pink" />
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+    </Grid>
 </UserControl>
