@@ -1,0 +1,23 @@
+﻿<Window x:Class="SQLGen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SQLGen"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="MainWindow"
+        Width="800"
+        Height="450"
+        Style="{StaticResource MaterialDesignWindow}"
+        mc:Ignorable="d">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Left" LastChildFill="False" Width="50">
+            
+        </DockPanel>
+    <local:ZoomBorder BorderThickness="2" Margin="5" BorderBrush="DodgerBlue" DockPanel.Dock="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White">
+        <Rectangle Width="50"
+                   Height="50"
+                   Fill="Green" />
+    </local:ZoomBorder>
+    </DockPanel>
+</Window>
