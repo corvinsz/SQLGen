@@ -22,11 +22,7 @@ public partial class TableControl : UserControl
     public TableControl()
     {
         InitializeComponent();
-        Columns = Enumerable.Range(1, 6).ToList();
-        DataContext = this;
     }
-
-    public List<int> Columns { get; }
 
     private void ResizeThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
     {

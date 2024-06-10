@@ -5,17 +5,29 @@
              xmlns:local="clr-namespace:SQLGen"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Width="{Binding Width}"
+             Height="{Binding Height}"
              mc:Ignorable="d">
     <Grid Width="250" Height="300">
-        <materialDesign:Card x:Name="Card" Padding="5">
+        <materialDesign:Card x:Name="Card">
             <DockPanel>
-                <TextBlock DockPanel.Dock="Top"
-                           Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                           Text="Header" />
-                <ListBox ItemsSource="{Binding Columns}">
+                <Grid materialDesign:ElevationAssist.Elevation="Dp24"
+                      Background="{DynamicResource MaterialDesign.Brush.Primary}"
+                      DockPanel.Dock="Top">
+                    <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}" Text="{Binding Name}" />
+                </Grid>
+                <Button Height="25"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AddColumnCommand}"
+                        Content="{materialDesign:PackIcon Kind=Plus}"
+                        DockPanel.Dock="Bottom" />
+                <ListBox HorizontalContentAlignment="Stretch"
+                         ItemsSource="{Binding Columns}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <local:ColumnControl />
+                            <local:ColumnControl DataContext="{Binding .}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

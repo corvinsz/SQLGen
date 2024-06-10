@@ -17,13 +17,15 @@
                 DockPanel.Dock="Right">
             <materialDesign:PackIcon HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
-                                     Kind="KeyLink" />
+                                     Kind="KeyLink"
+                                     Visibility="{Binding IsForeignKey, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Border>
         <Border Width="40"
                 Height="40"
                 Margin="20,0,0,0"
                 Background="DarkSlateGray"
-                DockPanel.Dock="Right">
+                DockPanel.Dock="Right"
+                Visibility="{Binding IsPrimaryKey, Converter={StaticResource BooleanToVisibilityConverter}}">
             <materialDesign:PackIcon HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      Kind="Key" />
@@ -31,6 +33,6 @@
 
         <TextBlock VerticalAlignment="Center"
                    DockPanel.Dock="Left"
-                   Text="Bezeichnung" />
+                   Text="{Binding Name}" />
     </DockPanel>
 </UserControl>

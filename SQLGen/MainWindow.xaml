@@ -10,6 +10,9 @@
         Height="450"
         Style="{StaticResource MaterialDesignWindow}"
         mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
     <DockPanel>
         <DockPanel Width="50"
                    DockPanel.Dock="Left"
@@ -21,11 +24,29 @@
                           BorderBrush="DodgerBlue"
                           BorderThickness="2"
                           DockPanel.Dock="Left">
-            <!--<Rectangle Width="50"
-                   Height="50"
-                   Fill="Green" />-->
 
-            <local:TableControl />
+            <ItemsControl ItemsSource="{Binding Tables}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:TableControl DataContext="{Binding .}"
+                                            PreviewMouseLeftButtonDown="TableControl_PreviewMouseLeftButtonDown"
+                                            PreviewMouseLeftButtonUp="TableControl_PreviewMouseLeftButtonUp"
+                                            Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+            <!--<local:TableControl />-->
 
         </local:ZoomBorder>
     </DockPanel>
