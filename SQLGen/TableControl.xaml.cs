@@ -19,21 +19,50 @@ namespace SQLGen;
 /// </summary>
 public partial class TableControl : UserControl
 {
+    private AdornerLayer adornerLayer;
+    private ResizeAdorner resizeAdorner;
     public TableControl()
     {
         InitializeComponent();
+        this.Loaded += MyUserControl_Loaded;
     }
 
-    private void ResizeThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    private void MyUserControl_Loaded(object sender, RoutedEventArgs e)
     {
-        if (Card is not null)
-        {
-            double newWidth = Card.Width + e.HorizontalChange;
-            double newHeight = Card.Height + e.VerticalChange;
+        // Ensure the adorner layer is available
+        adornerLayer = AdornerLayer.GetAdornerLayer(this);
 
-            // Set new width and height with minimum constraints
-            Card.Width = newWidth > 0 ? newWidth : 0;
-            Card.Height = newHeight > 0 ? newHeight : 0;
+        if (adornerLayer is not null)
+        {
+            // Create and add the resize adorner
+            resizeAdorner = new ResizeAdorner(this);
+            adornerLayer.Add(resizeAdorner);
         }
     }
+
+    //private void resizeThumbBottom_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    //{
+    //    if (Card is not null)
+    //    {
+    //        //double newWidth = Card.Width + e.HorizontalChange;
+    //        double newHeight = Card.Height + e.VerticalChange;
+
+    //        // Set new width and height with minimum constraints
+    //        //Card.Width = newWidth > 0 ? newWidth : 0;
+    //        Card.Height = newHeight > 0 ? newHeight : 0;
+    //    }
+    //}
+
+    //private void resizeThumbRight_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    //{
+    //    if (Card is not null)
+    //    {
+    //        //double newWidth = Card.Width + e.HorizontalChange;
+    //        double newHeight = Card.Height + e.VerticalChange;
+
+    //        // Set new width and height with minimum constraints
+    //        //Card.Width = newWidth > 0 ? newWidth : 0;
+    //        Card.Height = newHeight > 0 ? newHeight : 0;
+    //    }
+    //}
 }

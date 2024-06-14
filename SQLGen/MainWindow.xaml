@@ -28,10 +28,11 @@
             <ItemsControl ItemsSource="{Binding Tables}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:TableControl DataContext="{Binding .}"
+                        <!--<local:TableControl DataContext="{Binding .}"
                                             PreviewMouseLeftButtonDown="TableControl_PreviewMouseLeftButtonDown"
                                             PreviewMouseLeftButtonUp="TableControl_PreviewMouseLeftButtonUp"
-                                            Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />
+                                            Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />-->
+                        <local:TableControl DataContext="{Binding .}" Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

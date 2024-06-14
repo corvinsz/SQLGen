@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,9 @@ public partial class MainViewModel : ObservableObject
         tbl.Y = 100;
         tbl.Height = 300;
         tbl.Width = 150;
-        tbl.Columns.Add(new ColumnViewModel() { Name = "ID", IsPrimaryKey = true });
-        tbl.Columns.Add(new ColumnViewModel() { Name = "Bezeichnung" });
-        tbl.Columns.Add(new ColumnViewModel() { Name = "ErstelltAm" });
+        tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
+        tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "Bezeichnung", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar } });
+        tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ErstelltAm", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
         Tables.Add(tbl);
     }
 

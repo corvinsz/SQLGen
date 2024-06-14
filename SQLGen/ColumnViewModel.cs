@@ -2,39 +2,19 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SQLGen;
 
-public partial class TableViewModel : ObservableObject
-{
-    [ObservableProperty]
-    private string _name;
-
-    public ObservableCollection<ColumnViewModel> Columns { get; } = [];
-
-    //Visual Properties
-    [ObservableProperty]
-    private double _x;
-    [ObservableProperty]
-    private double _y;
-    [ObservableProperty]
-    private double _height;
-    [ObservableProperty]
-    private double _width;
-
-    [RelayCommand]
-    private void AddColumn()
-    {
-        Columns.Add(new ColumnViewModel() { Name = "ErstelltAm" });
-    }
-}
-
 public partial class ColumnViewModel : ObservableObject
 {
+    private readonly TableViewModel _parentTable;
+
+    public static IEnumerable<SqlDbType> SQLTypes { get; } = Enum.GetValues(typeof(SqlDbType)).Cast<SqlDbType>().ToList();
+
     [ObservableProperty]
     private bool _isPrimaryKey;
     [ObservableProperty]
@@ -43,8 +23,54 @@ public partial class ColumnViewModel : ObservableObject
     private string _name;
     [ObservableProperty]
     private SqlDataType _dataType;
+
+    public ColumnViewModel(TableViewModel parentTable)
+    {
+        _parentTable = parentTable;
+    }
+
+    [RelayCommand]
+    private void DeleteFromCollection()
+    {
+        _parentTable?.Columns.Remove(this);
+    }
+
+    [RelayCommand]
+    private void ToggleForeignKey() => IsForeignKey = !IsForeignKey;
+
+    [RelayCommand]
+    private void TogglePrimaryKey() => IsPrimaryKey = !IsPrimaryKey;
+
+    internal string? GenerateSQL(DBMS dbms)
+    {
+
+    }
 }
 
-public class SqlDataType
+public partial class SqlDataType : ObservableObject
 {
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasLength))]
+    [NotifyPropertyChangedFor(nameof(HasPrecision))]
+    SqlDbType _type;
+
+    partial void OnTypeChanged(SqlDbType oldValue, SqlDbType newValue)
+    {
+        var idk = 2;
+    }
+
+    [ObservableProperty]
+    private int _length;
+
+    [ObservableProperty]
+    private int _precision;
+
+    //Todo add missing types
+    private static readonly List<SqlDbType> _typesWithLength = [SqlDbType.Decimal, SqlDbType.Float, SqlDbType.NVarChar];
+
+    //Todo add missing types
+    private static readonly List<SqlDbType> _typesWithPrecision = [SqlDbType.Decimal, SqlDbType.Float];
+
+    public bool HasLength => _typesWithLength.Contains(this.Type);
+    public bool HasPrecision => _typesWithPrecision.Contains(this.Type);
 }

@@ -5,20 +5,49 @@
              xmlns:local="clr-namespace:SQLGen"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sysData="clr-namespace:System.Data;assembly=netstandard"
+             xmlns:viewModels="clr-namespace:SQLGen"
+             d:DataContext="{d:DesignInstance Type=local:ColumnViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             Background="Transparent"
              mc:Ignorable="d">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="{Binding TogglePrimaryKeyCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right"
+                                                 Kind="Check"
+                                                 Visibility="{Binding IsPrimaryKey, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock DockPanel.Dock="Left" Text="PK" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding ToggleForeignKeyCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right"
+                                                 Kind="Check"
+                                                 Visibility="{Binding IsForeignKey, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock DockPanel.Dock="Left" Text="FK" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding DeleteFromCollectionCommand}" Header="Delete" />
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <DockPanel>
         <Border Width="40"
                 Height="40"
                 Margin="5,0,5,0"
                 Padding="0"
                 Background="DarkGray"
-                DockPanel.Dock="Right">
+                DockPanel.Dock="Right"
+                Visibility="{Binding IsForeignKey, Converter={StaticResource BooleanToVisibilityConverter}}">
             <materialDesign:PackIcon HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
-                                     Kind="KeyLink"
-                                     Visibility="{Binding IsForeignKey, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                     Kind="KeyLink" />
         </Border>
         <Border Width="40"
                 Height="40"
@@ -34,5 +63,38 @@
         <TextBlock VerticalAlignment="Center"
                    DockPanel.Dock="Left"
                    Text="{Binding Name}" />
+
+        <ComboBox Margin="20,0,0,0"
+                  DockPanel.Dock="Left"
+                  ItemsSource="{x:Static viewModels:ColumnViewModel.SQLTypes}"
+                  SelectedItem="{Binding DataType, Mode=TwoWay}" />
+
+        <StackPanel Margin="10,0,0,0"
+                    DockPanel.Dock="Left"
+                    Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding DataType.HasLength, Converter={StaticResource BooleanToVisibilityConverter}}" Value="False" />
+                                <Condition Binding="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <TextBox Text="(" />
+            <TextBox Margin="0,0,2,0"
+                     Text="{Binding DataType.Length}"
+                     Visibility="{Binding DataType.HasLength, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBox Text="{Binding DataType.Precision}" Visibility="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBox Text=")" />
+        </StackPanel>
+
     </DockPanel>
 </UserControl>

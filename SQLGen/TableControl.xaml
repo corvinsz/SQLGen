@@ -8,8 +8,8 @@
              Width="{Binding Width}"
              Height="{Binding Height}"
              mc:Ignorable="d">
-    <Grid Width="250" Height="300">
-        <materialDesign:Card x:Name="Card">
+    <Grid Background="Fuchsia">
+        <materialDesign:Card x:Name="Card" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <DockPanel>
                 <Grid materialDesign:ElevationAssist.Elevation="Dp24"
                       Background="{DynamicResource MaterialDesign.Brush.Primary}"
@@ -33,18 +33,31 @@
                 </ListBox>
             </DockPanel>
         </materialDesign:Card>
-        <Thumb x:Name="ResizeThumb"
-               Width="10"
-               Height="10"
-               HorizontalAlignment="Right"
+        <!--<Thumb x:Name="resizeThumbBottom"
+               Width="16"
+               Height="6"
+               HorizontalAlignment="Center"
                VerticalAlignment="Bottom"
-               Cursor="SizeNWSE"
-               DragDelta="ResizeThumb_DragDelta">
+               Cursor="ScrollNW"
+               DragDelta="resizeThumbBottom_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
                     <Rectangle Fill="Pink" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
+        <Thumb x:Name="resizeThumbRight"
+               Width="6"
+               Height="16"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               Cursor="SizeWE"
+               DragDelta="resizeThumbRight_DragDelta">
+            <Thumb.Template>
+                <ControlTemplate>
+                    <Rectangle Fill="Green" />
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>-->
     </Grid>
 </UserControl>

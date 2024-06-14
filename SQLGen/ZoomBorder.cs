@@ -54,8 +54,8 @@ public class ZoomBorder : Border
             this.MouseLeftButtonDown += child_MouseLeftButtonDown;
             this.MouseLeftButtonUp += child_MouseLeftButtonUp;
             this.MouseMove += child_MouseMove;
-            this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(
-              child_PreviewMouseRightButtonDown);
+            //this.PreviewMouseRightButtonDown += new MouseButtonEventHandler(
+            //  child_PreviewMouseRightButtonDown);
         }
     }
 
