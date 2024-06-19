@@ -25,7 +25,7 @@ public class ResizeAdorner : Adorner
             Cursor = Cursors.SizeNWSE,
             Width = 10,
             Height = 10,
-            Background = new SolidColorBrush(Colors.Green)
+            Background = new SolidColorBrush(Colors.Transparent)
         };
 
         thumb.DragDelta += Thumb_DragDelta;

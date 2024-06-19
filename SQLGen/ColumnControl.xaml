@@ -60,17 +60,10 @@
                                      Kind="Key" />
         </Border>
 
-        <TextBlock VerticalAlignment="Center"
-                   DockPanel.Dock="Left"
-                   Text="{Binding Name}" />
 
-        <ComboBox Margin="20,0,0,0"
-                  DockPanel.Dock="Left"
-                  ItemsSource="{x:Static viewModels:ColumnViewModel.SQLTypes}"
-                  SelectedItem="{Binding DataType, Mode=TwoWay}" />
 
         <StackPanel Margin="10,0,0,0"
-                    DockPanel.Dock="Left"
+                    DockPanel.Dock="Right"
                     Orientation="Horizontal">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
@@ -88,13 +81,25 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBox Text="(" />
-            <TextBox Margin="0,0,2,0"
+            <TextBlock Text="(" />
+            <TextBox MinWidth="30"
+                     Margin="0,0,2,0"
                      Text="{Binding DataType.Length}"
                      Visibility="{Binding DataType.HasLength, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <TextBox Text="{Binding DataType.Precision}" Visibility="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <TextBox Text=")" />
+            <TextBox MinWidth="30"
+                     Text="{Binding DataType.Precision}"
+                     Visibility="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBlock Text=")" />
         </StackPanel>
+
+        <ComboBox Margin="20,0,0,0"
+                  DockPanel.Dock="Right"
+                  ItemsSource="{x:Static viewModels:ColumnViewModel.SQLTypes}"
+                  SelectedItem="{Binding DataType, Mode=TwoWay}" />
+
+        <TextBlock VerticalAlignment="Center"
+                   DockPanel.Dock="Left"
+                   Text="{Binding Name}" />
 
     </DockPanel>
 </UserControl>

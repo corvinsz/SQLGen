@@ -1,15 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SQLGen;
 
-public partial class ColumnViewModel : ObservableObject
+public partial class ColumnViewModel : SelectableElement
 {
     private readonly TableViewModel _parentTable;
 
@@ -43,7 +45,34 @@ public partial class ColumnViewModel : ObservableObject
 
     internal string? GenerateSQL(DBMS dbms)
     {
+        switch (dbms)
+        {
+            case DBMS.MySQL:
+                break;
+            case DBMS.MariaDB:
+                break;
+            case DBMS.MSSQLServer:
+                return $"[{Name}] {DataType.GenerateSQL()} {GenerateKeyConstraints(dbms)}";
+        }
+        throw new NotImplementedException();
+    }
 
+    private string GenerateKeyConstraints(DBMS dbms)
+    {
+        if (IsPrimaryKey && IsForeignKey)
+        {
+            //TODO
+            return "PRIMARY KEY IDENTITY(1,1)";
+        }
+        if (IsPrimaryKey)
+        {
+            return "PRIMARY KEY IDENTITY(1,1)";
+        }
+        if (IsForeignKey)
+        {
+            return "FOREIGN KEY REFERENCES <table>(ID)";
+        }
+        return string.Empty;
     }
 }
 
@@ -52,7 +81,7 @@ public partial class SqlDataType : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasLength))]
     [NotifyPropertyChangedFor(nameof(HasPrecision))]
-    SqlDbType _type;
+    private SqlDbType _type;
 
     partial void OnTypeChanged(SqlDbType oldValue, SqlDbType newValue)
     {
@@ -73,4 +102,17 @@ public partial class SqlDataType : ObservableObject
 
     public bool HasLength => _typesWithLength.Contains(this.Type);
     public bool HasPrecision => _typesWithPrecision.Contains(this.Type);
+
+    public string GenerateSQL()
+    {
+        if (HasLength && HasPrecision)
+        {
+            return $"{Type}({Length},{Precision})";
+        }
+        if (HasLength)
+        {
+            return $"{Type}({Length})";
+        }
+        return Type.ToString();
+    }
 }

@@ -8,20 +8,22 @@ namespace SQLGen;
 
 public enum DBMS
 {
+    MSSQLServer,
     MySQL,
     MariaDB,
-    MSSQLServer
+    PostgreSQL
 }
 
-public class MSSQLServerGenerator
+public class SQLGenerator
 {
-    public string Generate(IEnumerable<TableViewModel> tables, DBMS dbms)
+    public static string Generate(IEnumerable<TableViewModel> tables, DBMS dbms)
     {
         StringBuilder sql = new();
-
         foreach (TableViewModel table in tables)
         {
             sql.AppendLine(table.GenerateSQL(dbms));
+            sql.AppendLine();
         }
+        return sql.ToString();
     }
 }

@@ -8,8 +8,10 @@
              Width="{Binding Width}"
              Height="{Binding Height}"
              mc:Ignorable="d">
-    <Grid Background="Fuchsia">
-        <materialDesign:Card x:Name="Card" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid>
+        <materialDesign:Card x:Name="Card"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch">
             <DockPanel>
                 <Grid materialDesign:ElevationAssist.Elevation="Dp24"
                       Background="{DynamicResource MaterialDesign.Brush.Primary}"
