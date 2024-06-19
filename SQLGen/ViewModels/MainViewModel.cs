@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SQLGen.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,27 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace SQLGen;
-
-public abstract partial class SelectableElement : ObservableObject
-{
-    [ObservableProperty]
-    private bool _isSelected;
-
-    public Type SelfType => this.GetType();
-}
-
-public enum RelativePosition
-{
-    //TopLeft,
-    Top,
-    //TopRight,
-    Right,
-    //BottomRight,
-    Bottom,
-    //BottomLeft,
-    Left
-}
+namespace SQLGen.ViewModels;
 
 public partial class LineViewModel : SelectableElement
 {

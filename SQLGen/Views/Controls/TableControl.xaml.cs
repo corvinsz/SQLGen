@@ -13,32 +13,48 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SQLGen;
+namespace SQLGen.Views.Controls;
 /// <summary>
 /// Interaction logic for TableControl.xaml
 /// </summary>
 public partial class TableControl : UserControl
 {
+    private const int MIN_SIZE = 40;
     private AdornerLayer adornerLayer;
     private ResizeAdorner resizeAdorner;
     public TableControl()
     {
         InitializeComponent();
-        this.Loaded += MyUserControl_Loaded;
+        //this.Loaded += MyUserControl_Loaded;
     }
 
-    private void MyUserControl_Loaded(object sender, RoutedEventArgs e)
+    private void resizeThumbBottom_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
     {
-        // Ensure the adorner layer is available
-        adornerLayer = AdornerLayer.GetAdornerLayer(this);
-
-        if (adornerLayer is not null)
+        if (thisControl.Height > MIN_SIZE)
         {
-            // Create and add the resize adorner
-            resizeAdorner = new ResizeAdorner(this);
-            adornerLayer.Add(resizeAdorner);
+            thisControl.Height += e.VerticalChange;
         }
+
+        if (thisControl.Width > MIN_SIZE)
+        {
+            thisControl.Width += e.HorizontalChange;
+        }
+
+        e.Handled = true;
     }
+
+    //private void MyUserControl_Loaded(object sender, RoutedEventArgs e)
+    //{
+    //    // Ensure the adorner layer is available
+    //    adornerLayer = AdornerLayer.GetAdornerLayer(this);
+
+    //    if (adornerLayer is not null)
+    //    {
+    //        // Create and add the resize adorner
+    //        resizeAdorner = new ResizeAdorner(this);
+    //        adornerLayer.Add(resizeAdorner);
+    //    }
+    //}
 
     //private void resizeThumbBottom_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
     //{

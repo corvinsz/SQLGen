@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 
-namespace SQLGen;
+namespace SQLGen.Models;
 public static class XAMLHelper
 {
     public static T FindChild<T>(this DependencyObject depObj)

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SQLGen.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SQLGen;
+namespace SQLGen.ViewModels;
 
 public partial class ColumnViewModel : SelectableElement
 {
@@ -82,11 +83,6 @@ public partial class SqlDataType : ObservableObject
     [NotifyPropertyChangedFor(nameof(HasLength))]
     [NotifyPropertyChangedFor(nameof(HasPrecision))]
     private SqlDbType _type;
-
-    partial void OnTypeChanged(SqlDbType oldValue, SqlDbType newValue)
-    {
-        var idk = 2;
-    }
 
     [ObservableProperty]
     private int _length;

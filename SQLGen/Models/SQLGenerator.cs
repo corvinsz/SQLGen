@@ -1,18 +1,13 @@
-﻿using System;
+﻿using SQLGen.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SQLGen;
+namespace SQLGen.Models;
 
-public enum DBMS
-{
-    MSSQLServer,
-    MySQL,
-    MariaDB,
-    PostgreSQL
-}
+
 
 public class SQLGenerator
 {

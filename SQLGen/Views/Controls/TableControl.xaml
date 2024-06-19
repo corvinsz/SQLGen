@@ -1,12 +1,13 @@
-﻿<UserControl x:Class="SQLGen.TableControl"
+﻿<UserControl x:Class="SQLGen.Views.Controls.TableControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:SQLGen"
+             xmlns:local="clr-namespace:SQLGen.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             Width="{Binding Width}"
-             Height="{Binding Height}"
+             x:Name="thisControl"
+             Width="{Binding Width, Mode=TwoWay}"
+             Height="{Binding Height, Mode=TwoWay}"
              mc:Ignorable="d">
     <Grid>
         <materialDesign:Card x:Name="Card"
@@ -16,7 +17,9 @@
                 <Grid materialDesign:ElevationAssist.Elevation="Dp24"
                       Background="{DynamicResource MaterialDesign.Brush.Primary}"
                       DockPanel.Dock="Top">
-                    <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}" Text="{Binding Name}" />
+                    <TextBlock Margin="10,5"
+                               Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                               Text="{Binding Name}" />
                 </Grid>
                 <Button Height="25"
                         HorizontalAlignment="Stretch"
@@ -35,10 +38,10 @@
                 </ListBox>
             </DockPanel>
         </materialDesign:Card>
-        <!--<Thumb x:Name="resizeThumbBottom"
+        <Thumb x:Name="resizeThumbBottom"
                Width="16"
                Height="6"
-               HorizontalAlignment="Center"
+               HorizontalAlignment="Right"
                VerticalAlignment="Bottom"
                Cursor="ScrollNW"
                DragDelta="resizeThumbBottom_DragDelta">
@@ -48,7 +51,7 @@
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
-        <Thumb x:Name="resizeThumbRight"
+        <!--<Thumb x:Name="resizeThumbRight"
                Width="6"
                Height="16"
                HorizontalAlignment="Right"

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using SQLGen.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -10,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SQLGen;
+namespace SQLGen.Windows;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
@@ -28,7 +29,7 @@ public partial class MainWindow : Window
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        _itemsPanel = XAMLHelper.FindChild<Canvas>(icTables);
+        _itemsPanel = Models.XAMLHelper.FindChild<Canvas>(icTables);
         DrawTableConnection();
     }
 
@@ -89,7 +90,7 @@ public partial class MainWindow : Window
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        _itemsPanel = XAMLHelper.FindChild<Canvas>(icTables);
+        _itemsPanel = Models.XAMLHelper.FindChild<Canvas>(icTables);
         DrawTableConnection();
     }
 }

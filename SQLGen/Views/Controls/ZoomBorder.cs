@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows;
 
-namespace SQLGen;
+namespace SQLGen.Views.Controls;
 public class ZoomBorder : Border
 {
     private UIElement child = null;

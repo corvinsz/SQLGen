@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SQLGen.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 
-namespace SQLGen;
+namespace SQLGen.ViewModels;
 
 public partial class TableViewModel : SelectableElement
 {
@@ -27,8 +29,17 @@ public partial class TableViewModel : SelectableElement
 
     partial void OnXChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
     partial void OnYChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
-    partial void OnHeightChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
-    partial void OnWidthChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
+    partial void OnHeightChanged(double oldValue, double newValue)
+    {
+        Debug.WriteLine($"Height: {oldValue} -> {newValue}");
+        VisualPropertyChanged?.Invoke(this, this);
+    }
+
+    partial void OnWidthChanged(double oldValue, double newValue)
+    {
+        Debug.WriteLine($"Width: {oldValue} -> {newValue}");
+        VisualPropertyChanged?.Invoke(this, this);
+    }
 
     public event EventHandler<TableViewModel> VisualPropertyChanged;
 
