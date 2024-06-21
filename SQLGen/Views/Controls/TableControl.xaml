@@ -9,6 +9,26 @@
              Width="{Binding Width, Mode=TwoWay}"
              Height="{Binding Height, Mode=TwoWay}"
              mc:Ignorable="d">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="{Binding todo}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Bin" />
+                        <TextBlock DockPanel.Dock="Left" Text="Delete" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding ToggleForeignKeyCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="TransitConnectionVariant" />
+                        <TextBlock DockPanel.Dock="Left" Text="Connect to.." />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid>
         <materialDesign:Card x:Name="Card"
                              HorizontalAlignment="Stretch"

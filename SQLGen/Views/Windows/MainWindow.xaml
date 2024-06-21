@@ -28,13 +28,19 @@
                   Y2="{Binding Y2}" />
         </ControlTemplate>
     </Window.Resources>
-    <DockPanel>
-        <DockPanel Width="50"
-                   DockPanel.Dock="Left"
-                   LastChildFill="False">
-            <Button Click="Button_Click" Content="Draw lines" />
-        </DockPanel>
-        <!--<local:ZoomBorder Margin="5"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel>
+            <DockPanel Width="50"
+                       DockPanel.Dock="Left"
+                       LastChildFill="False">
+                <Button Click="Button_Click" Content="Draw lines" />
+            </DockPanel>
+            <!--<local:ZoomBorder Margin="5"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
                           Background="White"
@@ -42,53 +48,57 @@
                           BorderThickness="2"
                           DockPanel.Dock="Left">-->
 
-        <ItemsControl x:Name="icTables"
-                      AlternationCount="999"
-                      DockPanel.Dock="Left"
-                      ItemsSource="{Binding Tables}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Thumb DragDelta="Thumb_DragDelta"
-                           PreviewMouseLeftButtonDown="TableControl_PreviewMouseLeftButtonDown"
-                           PreviewMouseLeftButtonUp="TableControl_PreviewMouseLeftButtonUp"
-                           Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}">
-                        <Thumb.Style>
-                            <Style TargetType="Thumb">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:TableViewModel}">
-                                        <Setter Property="Panel.ZIndex" Value="99" />
-                                        <Setter Property="Template" Value="{StaticResource TableTemplate}" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:LineViewModel}">
-                                        <Setter Property="Template" Value="{StaticResource LineTemplate}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Thumb.Style>
+            <ItemsControl x:Name="icTables"
+                          AlternationCount="999"
+                          DockPanel.Dock="Left"
+                          ItemsSource="{Binding Tables}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Thumb DragDelta="Thumb_DragDelta"
+                               PreviewMouseLeftButtonDown="TableControl_PreviewMouseLeftButtonDown"
+                               PreviewMouseLeftButtonUp="TableControl_PreviewMouseLeftButtonUp"
+                               Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}">
+                            <Thumb.Style>
+                                <Style TargetType="Thumb">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:TableViewModel}">
+                                            <Setter Property="Panel.ZIndex" Value="99" />
+                                            <Setter Property="Template" Value="{StaticResource TableTemplate}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:LineViewModel}">
+                                            <Setter Property="Template" Value="{StaticResource LineTemplate}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Thumb.Style>
 
-                    </Thumb>
-                    <!--<local:TableControl DataContext="{Binding .}" Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />-->
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <!--<ItemsControl.Template>
+                        </Thumb>
+                        <!--<local:TableControl DataContext="{Binding .}" Tag="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource TemplatedParent}}" />-->
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <!--<ItemsControl.Template>
                     <ControlTemplate TargetType="ItemsControl">
                         <Canvas x:Name="myCanvas">
                         </Canvas>
                     </ControlTemplate>
                 </ItemsControl.Template>-->
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-        </ItemsControl>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
 
-        <!--</local:ZoomBorder>-->
-    </DockPanel>
+            <!--</local:ZoomBorder>-->
+        </DockPanel>
+        
+        
+
+    </Grid>
 </Window>

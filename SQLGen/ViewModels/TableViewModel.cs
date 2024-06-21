@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SQLGen.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Text;
 using System.Windows;
 
@@ -27,8 +28,23 @@ public partial class TableViewModel : SelectableElement
     [ObservableProperty]
     private double _width;
 
-    partial void OnXChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
-    partial void OnYChanged(double oldValue, double newValue) => VisualPropertyChanged?.Invoke(this, this);
+    private double RoundToNearestTen(double value)
+    {
+        return Math.Round(value / 20.0) * 20.0;
+    }
+
+    partial void OnXChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+        _x = RoundToNearestTen(value);
+        VisualPropertyChanged?.Invoke(this, this);
+    }
+    partial void OnYChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+        _y = RoundToNearestTen(value);
+        VisualPropertyChanged?.Invoke(this, this);
+    }
     partial void OnHeightChanged(double oldValue, double newValue)
     {
         Debug.WriteLine($"Height: {oldValue} -> {newValue}");
@@ -74,8 +90,13 @@ public partial class TableViewModel : SelectableElement
         double deltaX = centerX2 - centerX1;
         double deltaY = centerY2 - centerY1;
 
+        // Invert deltaY to account for the top-left origin of the WPF coordinate system
+        deltaY = -deltaY;
+
+        //Calculate angle
         double angleInDegrees = Math.Atan2(deltaY, deltaX) * (180 / Math.PI);
 
+        //Convert angle to enum
         return DegreeToRelativePosition(angleInDegrees);
     }
 
@@ -91,12 +112,22 @@ public partial class TableViewModel : SelectableElement
         };
     }
 
-    private static RelativePosition DegreeToRelativePosition(double degree)
+    private static RelativePosition DegreeToRelativePosition(double angle)
     {
-        if (degree.IsBetween(45, 135)) return RelativePosition.Top;
-        if (degree.IsBetween(135, 225)) return RelativePosition.Left;
-        if (degree.IsBetween(225, 315)) return RelativePosition.Bottom;
-        //if (degree.IsBetween(315, 45)) return RelativePosition.Top;
+        angle = NormalizeAngle(angle);
+
+        if (angle.IsBetween(45, 135)) return RelativePosition.Top;
+        if (angle.IsBetween(135, 225)) return RelativePosition.Left;
+        if (angle.IsBetween(225, 315)) return RelativePosition.Bottom;
         return RelativePosition.Right;
+    }
+
+    private static double NormalizeAngle(double angle)
+    {
+        if (angle < 0)
+        {
+            angle += 360;
+        }
+        return angle;
     }
 }
