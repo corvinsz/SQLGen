@@ -8,6 +8,8 @@
              x:Name="thisControl"
              Width="{Binding Width, Mode=TwoWay}"
              Height="{Binding Height, Mode=TwoWay}"
+             Background="Transparent"
+             MouseLeftButtonUp="thisControl_PreviewMouseLeftButtonDown"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
         <ContextMenu>
@@ -59,15 +61,15 @@
             </DockPanel>
         </materialDesign:Card>
         <Thumb x:Name="resizeThumbBottom"
-               Width="16"
-               Height="6"
+               Width="10"
+               Height="10"
                HorizontalAlignment="Right"
                VerticalAlignment="Bottom"
                Cursor="ScrollNW"
                DragDelta="resizeThumbBottom_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Rectangle Fill="Pink" />
+                    <Rectangle Fill="{DynamicResource MaterialDesign.Brush.Primary.Dark}" Opacity=".5" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>

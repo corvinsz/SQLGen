@@ -8,8 +8,6 @@
              xmlns:sysData="clr-namespace:System.Data;assembly=netstandard"
              xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewModels:ColumnViewModel}"
-             d:DesignHeight="450"
-             d:DesignWidth="800"
              Background="Transparent"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
