@@ -30,7 +30,9 @@ public partial class TableViewModel : SelectableElement
 
     private double RoundToNearestTen(double value)
     {
-        return Math.Round(value / 20.0) * 20.0;
+        double snappingDistance = (double)MainViewModel.Instance.Settings.SnapDistance;
+
+        return Math.Round(value / snappingDistance) * snappingDistance;
     }
 
     partial void OnXChanged(double value)
