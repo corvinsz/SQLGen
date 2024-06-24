@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="SQLGen.Views.Controls.TableControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ap="clr-namespace:SQLGen.Views.AttachedProperties"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SQLGen.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -12,7 +13,28 @@
              MouseLeftButtonUp="thisControl_PreviewMouseLeftButtonDown"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
-        <ContextMenu>
+        <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">
+            <MenuItem>
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="TransitConnectionVariant" />
+                        <TextBlock Margin="0,0,20,0"
+                                   DockPanel.Dock="Left"
+                                   Text="Connect to.." />
+                    </DockPanel>
+                </MenuItem.Header>
+                <ItemsControl ItemsSource="{Binding Tables}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Command="{Binding ConnectToCommand}"
+                                      CommandParameter="{Binding .}"
+                                      Header="{Binding Name}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </MenuItem>
+        </ContextMenu>
+        <!--<ContextMenu>
             <MenuItem Command="{Binding todo}">
                 <MenuItem.Header>
                     <DockPanel>
@@ -21,15 +43,24 @@
                     </DockPanel>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Command="{Binding ToggleForeignKeyCommand}">
+            <MenuItem>
                 <MenuItem.Header>
                     <DockPanel>
                         <materialDesign:PackIcon DockPanel.Dock="Right" Kind="TransitConnectionVariant" />
-                        <TextBlock DockPanel.Dock="Left" Text="Connect to.." />
+                        <TextBlock Margin="0,0,20,0"
+                                   DockPanel.Dock="Left"
+                                   Text="Connect to.." />
                     </DockPanel>
                 </MenuItem.Header>
+                <ItemsControl ItemsSource="{Binding DataContext.Tables, RelativeSource={RelativeSource AncestorType=Window}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Name}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </MenuItem>
-        </ContextMenu>
+        </ContextMenu>-->
     </UserControl.ContextMenu>
     <Grid>
         <materialDesign:Card x:Name="Card"
