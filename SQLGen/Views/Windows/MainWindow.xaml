@@ -42,14 +42,29 @@
             </Grid.RowDefinitions>
 
             <DockPanel>
-                <DockPanel Width="50"
+                <DockPanel Width="80"
                            DockPanel.Dock="Left"
                            LastChildFill="False">
-                    <Button HorizontalAlignment="Stretch"
-                            Click="Button_Click"
-                            Content="{materialDesign:PackIcon Kind=Gear}"
+
+                    <Button Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding GenerateSQLCommand}"
+                            DockPanel.Dock="Top"
+                            Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Width="auto"
+                                                 Height="auto"
+                                                 Kind="Play" />
+                    </Button>
+
+                    <Button Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                            HorizontalAlignment="Stretch"
+                            Click="Settings_Click"
                             DockPanel.Dock="Bottom"
-                            Style="{StaticResource MaterialDesignFlatButton}" />
+                            Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Width="auto"
+                                                 Height="auto"
+                                                 Kind="Gear" />
+                    </Button>
                 </DockPanel>
                 <!--<local:ZoomBorder Margin="5"
                           HorizontalAlignment="Stretch"

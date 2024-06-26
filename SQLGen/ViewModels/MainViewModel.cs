@@ -100,6 +100,13 @@ public partial class MainViewModel : ObservableObject
 		//Tables.Remove(item);
 	}
 
+	[RelayCommand]
+	private void GenerateSQL()
+	{
+		string sql = Models.SQLGenerator.Generate(Tables.OfType<TableViewModel>(), Models.DBMS.MSSQLServer);
+		MessageBox.Show(sql);
+	}
+
 	private void AddTable()
 	{
 		Tables.Add(new TableViewModel() { X = 200, Y = 100 });

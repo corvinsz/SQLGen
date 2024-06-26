@@ -28,7 +28,7 @@
 
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                    <ColumnDefinition Width="auto" SharedSizeGroup="SnappingLabel" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
@@ -41,7 +41,7 @@
             </Grid>
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="Label" />
+                    <ColumnDefinition Width="auto" SharedSizeGroup="SnappingLabel" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0"
@@ -52,9 +52,29 @@
                                               Minimum="1"
                                               Value="{Binding Settings.SizeSnapping}" />
             </Grid>
+
+
+            <TextBlock Margin="0,20,0,0"
+                       DockPanel.Dock="Top"
+                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                       Text="Other" />
+            <Separator Background="{DynamicResource MaterialDesign.Brush.Secondary}" DockPanel.Dock="Top" />
+
+            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Line thickness " />
+                <materialDesign:NumericUpDown Grid.Column="1"
+                                              Maximum="50"
+                                              Minimum="1"
+                                              Value="{Binding Settings.LineThickness}" />
+            </Grid>
+
         </DockPanel>
-
-
 
         <Button Grid.Row="2"
                 Margin="16,16,16,0"

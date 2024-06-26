@@ -61,10 +61,9 @@ public partial class MainWindow : Window
 		MessageBox.Show("line clicked");
 	}
 
-	private async void Button_Click(object sender, RoutedEventArgs e)
+	private async void Settings_Click(object sender, RoutedEventArgs e)
 	{
 		var settingsDialog = new Views.Controls.SettingsControl();
-
 		await DialogHost.Show(settingsDialog, "RootDialog");
 	}
 }

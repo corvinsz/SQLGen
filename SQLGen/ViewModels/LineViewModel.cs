@@ -15,7 +15,7 @@ public partial class LineViewModel : SelectableElement
 		ArgumentNullException.ThrowIfNull(to, nameof(to));
 
 		Stroke = Brushes.DarkGray;
-		StrokeThickness = 2;
+		StrokeThickness = MainViewModel.Instance.Settings.LineThickness;
 		From = from;
 		To = to;
 
