@@ -36,8 +36,6 @@
 
 
     <materialDesign:DialogHost CloseOnClickAway="True" Identifier="RootDialog">
-
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition />

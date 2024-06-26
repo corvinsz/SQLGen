@@ -12,6 +12,14 @@
              mc:Ignorable="d">
     <UserControl.ContextMenu>
         <ContextMenu>
+            <MenuItem Command="{Binding RenameCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Pen" />
+                        <TextBlock DockPanel.Dock="Left" Text="Rename" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
             <MenuItem Command="{Binding TogglePrimaryKeyCommand}">
                 <MenuItem.Header>
                     <DockPanel>

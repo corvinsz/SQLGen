@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using SQLGen.Models;
 using System;
 using System.Collections;
@@ -43,6 +44,8 @@ public partial class ColumnViewModel : SelectableElement
 
     [RelayCommand]
     private void TogglePrimaryKey() => IsPrimaryKey = !IsPrimaryKey;
+
+
 
     internal string? GenerateSQL(DBMS dbms)
     {

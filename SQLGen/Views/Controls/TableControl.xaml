@@ -13,8 +13,17 @@
              MouseLeftButtonUp="thisControl_PreviewMouseLeftButtonDown"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
-        <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">
-            <MenuItem>
+        <!--<ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">-->
+        <ContextMenu>
+            <MenuItem Command="{Binding RenameCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Pen" />
+                        <TextBlock DockPanel.Dock="Left" Text="Rename" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding AddConnectionCommand}">
                 <MenuItem.Header>
                     <DockPanel>
                         <materialDesign:PackIcon DockPanel.Dock="Right" Kind="TransitConnectionVariant" />
@@ -23,15 +32,6 @@
                                    Text="Connect to.." />
                     </DockPanel>
                 </MenuItem.Header>
-                <ItemsControl ItemsSource="{Binding Tables}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem Command="{Binding ConnectToCommand}"
-                                      CommandParameter="{Binding .}"
-                                      Header="{Binding Name}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
             </MenuItem>
         </ContextMenu>
         <!--<ContextMenu>
