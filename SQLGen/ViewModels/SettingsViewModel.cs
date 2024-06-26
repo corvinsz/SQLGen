@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 namespace SQLGen.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private int _snapDistance = 20;
+	[ObservableProperty]
+	private int _positionSnapping = 20;
+
+	[ObservableProperty]
+	private int _sizeSnapping = 20;
 }

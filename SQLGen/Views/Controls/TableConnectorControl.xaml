@@ -15,11 +15,15 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Connect table to" />
+        <TextBlock Grid.Row="0"
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                   Text="Connect table to" />
 
-        <ListBox x:Name="lbTables"
+        <ListBox x:Name="lbTables" PreviewMouseDoubleClick="lbTables_PreviewMouseDoubleClick"
                  Grid.Row="1"
-                 DisplayMemberPath="Name" />
+                 MaxHeight="500"
+                 DisplayMemberPath="Name" >
+        </ListBox>
 
         <StackPanel Grid.Row="2"
                     HorizontalAlignment="Right"

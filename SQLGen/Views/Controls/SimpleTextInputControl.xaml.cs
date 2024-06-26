@@ -19,27 +19,33 @@ namespace SQLGen.Views.Controls;
 /// </summary>
 public partial class SimpleTextInputControl : UserControl
 {
-    private readonly Predicate<string> _validator;
-    public SimpleTextInputControl(string initialTextValue = null, Predicate<string> validator = null)
-    {
-        InitializeComponent();
-        _validator = validator;
-        btnOk.IsEnabled = false;
-        tbInput.Text = initialTextValue;
+	private readonly Predicate<string> _validator;
+	public SimpleTextInputControl(string initialTextValue = null, Predicate<string> validator = null)
+	{
+		InitializeComponent();
+		_validator = validator;
+		btnOk.IsEnabled = false;
+		tbInput.Text = initialTextValue;
 
-        if (validator is null)
-        {
-            btnOk.IsEnabled = true;
-        }
-    }
+		if (initialTextValue?.Length > 0)
+		{
+			tbInput.CaretIndex = initialTextValue.Length;
+		}
+		tbInput.Focus();
 
-    private void tbInput_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (_validator is null)
-        {
-            return;
-        }
+		if (validator is null)
+		{
+			btnOk.IsEnabled = true;
+		}
+	}
 
-        btnOk.IsEnabled = _validator(tbInput.Text);
-    }
+	private void tbInput_TextChanged(object sender, TextChangedEventArgs e)
+	{
+		if (_validator is null)
+		{
+			return;
+		}
+
+		btnOk.IsEnabled = _validator(tbInput.Text);
+	}
 }

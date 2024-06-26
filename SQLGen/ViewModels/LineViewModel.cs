@@ -6,8 +6,8 @@ namespace SQLGen.ViewModels;
 
 public partial class LineViewModel : SelectableElement
 {
-	private readonly TableViewModel _from;
-	private readonly TableViewModel _to;
+	public TableViewModel From { get; }
+	public TableViewModel To { get; }
 
 	public LineViewModel(TableViewModel from, TableViewModel to)
 	{
@@ -16,11 +16,11 @@ public partial class LineViewModel : SelectableElement
 
 		Stroke = Brushes.DarkGray;
 		StrokeThickness = 2;
-		_from = from;
-		_to = to;
+		From = from;
+		To = to;
 
-		_from.VisualPropertyChanged += Table_VisualPropertyChanged;
-		_to.VisualPropertyChanged += Table_VisualPropertyChanged;
+		From.VisualPropertyChanged += Table_VisualPropertyChanged;
+		To.VisualPropertyChanged += Table_VisualPropertyChanged;
 	}
 
 	private void Table_VisualPropertyChanged(object? sender, TableViewModel e)
@@ -28,15 +28,15 @@ public partial class LineViewModel : SelectableElement
 		CalculatePositions();
 	}
 
-	private void CalculatePositions()
+	public void CalculatePositions()
 	{
-		RelativePosition pos = _from.CalculateRelativePosition(_to);
-		System.Windows.Point P1 = _from.GetPointOfSide(pos);
+		RelativePosition pos = From.CalculateRelativePosition(To);
+		System.Windows.Point P1 = From.GetPointOfSide(pos);
 		X1 = P1.X;
 		Y1 = P1.Y;
 
 		pos = pos.GetOppositeSide();
-		System.Windows.Point P2 = _to.GetPointOfSide(pos);
+		System.Windows.Point P2 = To.GetPointOfSide(pos);
 		X2 = P2.X;
 		Y2 = P2.Y;
 	}

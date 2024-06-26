@@ -10,9 +10,8 @@
         xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
         x:Name="outerWindow"
         Title="MainWindow"
-        Width="800"
-        Height="450"
         Style="{StaticResource MaterialDesignWindow}"
+        WindowState="Maximized"
         mc:Ignorable="d">
     <Window.DataContext>
         <viewModels:MainViewModel />

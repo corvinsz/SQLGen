@@ -1,4 +1,5 @@
-﻿using SQLGen.ViewModels;
+﻿using MaterialDesignThemes.Wpf;
+using SQLGen.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,14 @@ namespace SQLGen.Views.Controls;
 /// </summary>
 public partial class TableConnectorControl : UserControl
 {
-    public TableConnectorControl(IEnumerable<TableViewModel> availableTables)
-    {
-        InitializeComponent();
-        lbTables.ItemsSource = availableTables;
-    }
+	public TableConnectorControl(IEnumerable<TableViewModel> availableTables)
+	{
+		InitializeComponent();
+		lbTables.ItemsSource = availableTables;
+	}
+
+	private void lbTables_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+	{
+		//DialogHost.CloseDialogCommand.Execute(lbTables.SelectedItem);
+	}
 }
