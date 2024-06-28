@@ -15,9 +15,14 @@
             <RowDefinition Height="auto " />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Style="{StaticResource MaterialDesignHeadline2TextBlock}"
-                   Text="Settings" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <materialDesign:PackIcon Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                                     Height="60"
+                                     Kind="Gear" />
+            <TextBlock Grid.Row="0"
+                       Style="{StaticResource MaterialDesignHeadline2TextBlock}"
+                       Text="Settings" />
+        </StackPanel>
 
         <DockPanel Grid.Row="1">
 
