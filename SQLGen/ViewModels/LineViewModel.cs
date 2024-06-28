@@ -25,10 +25,10 @@ public partial class LineViewModel : SelectableElement
 
 	private void Table_VisualPropertyChanged(object? sender, TableViewModel e)
 	{
-		CalculatePositions();
+		CalculateStartAndEndpoint();
 	}
 
-	public void CalculatePositions()
+	public void CalculateStartAndEndpoint()
 	{
 		RelativePosition pos = From.CalculateRelativePosition(To);
 		System.Windows.Point P1 = From.GetPointOfSide(pos);

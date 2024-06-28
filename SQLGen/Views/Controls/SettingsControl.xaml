@@ -42,7 +42,7 @@
                 <materialDesign:NumericUpDown Grid.Column="1"
                                               Maximum="50"
                                               Minimum="1"
-                                              Value="{Binding Settings.PositionSnapping}" />
+                                              Value="{Binding Settings.PositionRounding}" />
             </Grid>
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
@@ -55,7 +55,7 @@
                 <materialDesign:NumericUpDown Grid.Column="1"
                                               Maximum="50"
                                               Minimum="1"
-                                              Value="{Binding Settings.SizeSnapping}" />
+                                              Value="{Binding Settings.SizeRounding}" />
             </Grid>
 
 

@@ -70,7 +70,7 @@ public partial class MainViewModel : ObservableObject
 			{
 				if (item is LineViewModel line)
 				{
-					line.CalculatePositions();
+					line.CalculateStartAndEndpoint();
 				}
 			}
 		}
@@ -81,12 +81,25 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	private SelectableElement _selectedTable;
 
+	partial void OnSelectedTableChanged(SelectableElement? oldValue, SelectableElement newValue)
+	{
+		if (oldValue is not null)
+		{
+			oldValue.IsSelected = false;
+		}
+
+		if (newValue is not null)
+		{
+			newValue.IsSelected = true;
+		}
+	}
+
 	public SettingsViewModel Settings { get; } = new();
 
 	[RelayCommand]
-	private void DeleteItem(object item)
+	private void DeleteSelectedItem()
 	{
-		if (item is null)
+		if (SelectedTable is null)
 		{
 			return;
 		}
@@ -97,7 +110,12 @@ public partial class MainViewModel : ObservableObject
 			return;
 		}
 
-		//Tables.Remove(item);
+		if (SelectedTable is TableViewModel table)
+		{
+			table.DeleteConnections(Tables);
+		}
+
+		Tables.Remove(SelectedTable);
 	}
 
 	[RelayCommand]

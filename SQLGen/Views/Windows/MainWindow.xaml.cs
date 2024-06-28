@@ -39,10 +39,10 @@ public partial class MainWindow : Window
 		_viewModel.SelectedTable = _viewModel.Tables[index.Value];
 	}
 
-	private void TableControl_PreviewMouseLeftButtonUp(object sender, MouseEventArgs e)
-	{
-		_viewModel.SelectedTable = null;
-	}
+	//private void TableControl_PreviewMouseLeftButtonUp(object sender, MouseEventArgs e)
+	//{
+	//	_viewModel.SelectedTable = null;
+	//}
 
 	private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
 	{

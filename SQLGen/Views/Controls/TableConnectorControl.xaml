@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="SQLGen.Views.Controls.TableConnectorControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SQLGen.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -19,10 +20,26 @@
                    Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                    Text="Connect table to" />
 
-        <ListBox x:Name="lbTables" PreviewMouseDoubleClick="lbTables_PreviewMouseDoubleClick"
+        <ListBox x:Name="lbTables"
                  Grid.Row="1"
-                 MaxHeight="500"
-                 DisplayMemberPath="Name" >
+                 MaxHeight="500">
+            <behaviors:Interaction.Triggers>
+                <behaviors:EventTrigger EventName="PreviewMouseDoubleClick">
+                    <behaviors:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="{Binding SelectedItem, ElementName=lbTables}" />
+                </behaviors:EventTrigger>
+            </behaviors:Interaction.Triggers>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Width="auto"
+                                                 Height="auto"
+                                                 Kind="Table" />
+                        <TextBlock Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Grid.Row="2"

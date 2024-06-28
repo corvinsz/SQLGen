@@ -9,10 +9,10 @@ namespace SQLGen.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
 	[ObservableProperty]
-	private int _positionSnapping = 20;
+	private int _positionRounding = 20;
 
 	[ObservableProperty]
-	private int _sizeSnapping = 20;
+	private int _sizeRounding = 20;
 
 	[ObservableProperty]
 	private int _lineThickness = 2;
