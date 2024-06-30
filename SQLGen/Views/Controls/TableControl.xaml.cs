@@ -40,8 +40,31 @@ public partial class TableControl : UserControl
 		e.Handled = true;
 	}
 
-	private void thisControl_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+	public void resizeThumbBottom_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 	{
-		MessageBox.Show("lmb");
+		DoAutoResize();
+	}
+
+	public bool DoAutoResize()
+	{
+		// Measure the content size
+		lbColumns.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+		Size contentSize = lbColumns.DesiredSize;
+
+		// Set the UserControl size to fit the content
+		double newWidth = contentSize.Width + (lbColumns.BorderThickness.Left + lbColumns.BorderThickness.Right) + (lbColumns.Padding.Left + lbColumns.Padding.Right);
+		double newHeight = contentSize.Height + (lbColumns.BorderThickness.Top + lbColumns.BorderThickness.Bottom) + (lbColumns.Padding.Top + lbColumns.Padding.Bottom);
+
+		newWidth = newWidth * 1.2;
+		newHeight += headerRow.ActualHeight + footerRow.ActualHeight;
+
+		if (this.Width == newWidth && this.Height == newHeight)
+		{
+			return false;
+		}
+
+		this.Width = newWidth;
+		this.Height = newHeight;
+		return true;
 	}
 }

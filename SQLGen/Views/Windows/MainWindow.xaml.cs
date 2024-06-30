@@ -66,4 +66,33 @@ public partial class MainWindow : Window
 		var settingsDialog = new Views.Controls.SettingsControl();
 		await DialogHost.Show(settingsDialog, "RootDialog");
 	}
+
+	private void btnResizeTables_Click(object sender, RoutedEventArgs e)
+	{
+		var tables = Models.XAMLHelper.FindVisualChildren<Views.Controls.TableControl>(this);
+
+		if (tables is null || tables.Count() == 0)
+		{
+			return;
+		}
+
+		int resizedTablesCount = 0;
+		foreach (Views.Controls.TableControl table in tables)
+		{
+			bool didResize = table.DoAutoResize();
+			if (didResize)
+			{
+				resizedTablesCount++;
+			}
+		}
+
+		if (resizedTablesCount == 0)
+		{
+			mainSnackbar.MessageQueue.Enqueue($"All tables are already sized accordingly");
+		}
+		else
+		{
+			mainSnackbar.MessageQueue.Enqueue($"Successfully resized {resizedTablesCount} tables");
+		}
+	}
 }

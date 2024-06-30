@@ -10,7 +10,6 @@
              Width="{Binding Width, Mode=TwoWay}"
              Height="{Binding Height, Mode=TwoWay}"
              Background="Transparent"
-             MouseLeftButtonUp="thisControl_PreviewMouseLeftButtonDown"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
         <!--<ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">-->
@@ -67,20 +66,23 @@
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch">
             <DockPanel>
-                <Grid materialDesign:ElevationAssist.Elevation="Dp24"
+                <Grid x:Name="headerRow"
+                      materialDesign:ElevationAssist.Elevation="Dp24"
                       Background="{DynamicResource MaterialDesign.Brush.Primary}"
                       DockPanel.Dock="Top">
                     <TextBlock Margin="10,5"
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="{Binding Name}" />
                 </Grid>
-                <Button Height="25"
+                <Button x:Name="footerRow"
+                        Height="25"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         Command="{Binding AddColumnCommand}"
                         Content="{materialDesign:PackIcon Kind=Plus}"
                         DockPanel.Dock="Bottom" />
-                <ListBox HorizontalContentAlignment="Stretch"
+                <ListBox x:Name="lbColumns"
+                         HorizontalContentAlignment="Stretch"
                          ItemsSource="{Binding Columns}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
@@ -97,7 +99,8 @@
                HorizontalAlignment="Right"
                VerticalAlignment="Bottom"
                Cursor="ScrollNW"
-               DragDelta="resizeThumbBottom_DragDelta">
+               DragDelta="resizeThumbBottom_DragDelta"
+               MouseDoubleClick="resizeThumbBottom_MouseDoubleClick">
             <Thumb.Template>
                 <ControlTemplate>
                     <Rectangle Fill="{DynamicResource MaterialDesign.Brush.Primary.Dark}" Opacity=".5" />

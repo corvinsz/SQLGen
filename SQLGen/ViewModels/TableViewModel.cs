@@ -72,8 +72,8 @@ public partial class TableViewModel : SelectableElement
 	[RelayCommand]
 	private async Task Rename()
 	{
-		var txtInputControl = new Views.Controls.SimpleTextInputControl(Name, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(txtInputControl, "RootDialog");
+		var textInputControl = new Views.Controls.SimpleTextInputControl(Name, x => !string.IsNullOrWhiteSpace(x));
+		var result = await DialogHost.Show(textInputControl, "RootDialog");
 
 		if (result is not string resultString)
 		{

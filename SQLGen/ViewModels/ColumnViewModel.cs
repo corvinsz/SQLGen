@@ -45,7 +45,19 @@ public partial class ColumnViewModel : SelectableElement
 	[RelayCommand]
 	private void TogglePrimaryKey() => IsPrimaryKey = !IsPrimaryKey;
 
+	[RelayCommand]
+	private async Task Rename()
+	{
+		var textInputControl = new Views.Controls.SimpleTextInputControl(Name, x => !string.IsNullOrWhiteSpace(x));
+		var result = await DialogHost.Show(textInputControl, "RootDialog");
 
+		if (result is not string resultString)
+		{
+			return;
+		}
+
+		Name = resultString;
+	}
 
 	internal string? GenerateSQL(DBMS dbms)
 	{
