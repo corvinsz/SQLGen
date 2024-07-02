@@ -26,7 +26,7 @@ public partial class ColumnViewModel : SelectableElement
 	[ObservableProperty]
 	private string _name;
 	[ObservableProperty]
-	private SqlDataType _dataType;
+	private SqlDataType _dataType = new();
 
 	public ColumnViewModel(TableViewModel parentTable)
 	{
@@ -89,5 +89,29 @@ public partial class ColumnViewModel : SelectableElement
 			return "FOREIGN KEY REFERENCES <table>(ID)";
 		}
 		return string.Empty;
+	}
+
+	internal void PredictTypeAndKey()
+	{
+		if (string.IsNullOrWhiteSpace(Name))
+		{
+			return;
+		}
+
+		if (string.Equals(Name, "ID", StringComparison.InvariantCultureIgnoreCase))
+		{
+			this.DataType.Type = SqlDbType.Int;
+			IsPrimaryKey = true;
+			IsForeignKey = false;
+			return;
+		}
+
+		if (Name.Contains("FK", StringComparison.InvariantCultureIgnoreCase))
+		{
+			this.DataType.Type = SqlDbType.Int;
+			IsPrimaryKey = false;
+			IsForeignKey = true;
+			return;
+		}
 	}
 }

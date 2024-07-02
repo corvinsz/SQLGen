@@ -79,6 +79,23 @@
                                               Value="{Binding Settings.LineThickness}" />
             </Grid>
 
+            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                    <TextBlock VerticalAlignment="Center" Text="Autodetect PK/FK " />
+                    <Grid VerticalAlignment="Center"
+                          Background="Transparent"
+                          ToolTip="If enabled, automatically flags a newly added column as primary key if the name equals 'ID', as foreign key if the name contains 'FK' and assigns the type 'int'.">
+                        <materialDesign:PackIcon Kind="Info" />
+                    </Grid>
+                </StackPanel>
+                <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.AutodetectKeys}" />
+            </Grid>
+
         </DockPanel>
 
         <Button Grid.Row="2"

@@ -40,7 +40,14 @@
                     </DockPanel>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Command="{Binding DeleteFromCollectionCommand}" Header="Delete" />
+            <MenuItem Command="{Binding DeleteFromCollectionCommand}">
+                <MenuItem.Header>
+                    <DockPanel>
+                        <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Bin" />
+                        <TextBlock DockPanel.Dock="Left" Text="Delete" />
+                    </DockPanel>
+                </MenuItem.Header>
+            </MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>
     <DockPanel>
@@ -50,6 +57,7 @@
                 Padding="0"
                 Background="DarkGray"
                 DockPanel.Dock="Right"
+                ToolTip="Foreign key"
                 Visibility="{Binding IsForeignKey, Converter={StaticResource BooleanToVisibilityConverter}}">
             <materialDesign:PackIcon HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
@@ -60,6 +68,7 @@
                 Margin="20,0,0,0"
                 Background="DarkSlateGray"
                 DockPanel.Dock="Right"
+                ToolTip="Primary key"
                 Visibility="{Binding IsPrimaryKey, Converter={StaticResource BooleanToVisibilityConverter}}">
             <materialDesign:PackIcon HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
@@ -77,8 +86,8 @@
                     <Style.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding DataType.HasLength, Converter={StaticResource BooleanToVisibilityConverter}}" Value="False" />
-                                <Condition Binding="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" Value="False" />
+                                <Condition Binding="{Binding DataType.HasLength}" Value="False" />
+                                <Condition Binding="{Binding DataType.HasPrecision}" Value="False" />
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -87,21 +96,23 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBlock Text="(" />
+            <TextBlock VerticalAlignment="Center" Text="(" />
             <TextBox MinWidth="30"
                      Margin="0,0,2,0"
+                     VerticalAlignment="Center"
                      Text="{Binding DataType.Length}"
                      Visibility="{Binding DataType.HasLength, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBox MinWidth="30"
+                     VerticalAlignment="Center"
                      Text="{Binding DataType.Precision}"
                      Visibility="{Binding DataType.HasPrecision, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <TextBlock Text=")" />
+            <TextBlock VerticalAlignment="Center" Text=")" />
         </StackPanel>
 
         <ComboBox Margin="20,0,0,0"
                   DockPanel.Dock="Right"
                   ItemsSource="{x:Static viewModels:ColumnViewModel.SQLTypes}"
-                  SelectedItem="{Binding DataType, Mode=TwoWay}" />
+                  SelectedItem="{Binding DataType.Type}" />
 
         <TextBlock VerticalAlignment="Center"
                    DockPanel.Dock="Left"

@@ -66,7 +66,15 @@ public partial class TableViewModel : SelectableElement
 			return;
 		}
 
-		Columns.Add(new ColumnViewModel(this) { Name = resultString });
+		var column = new ColumnViewModel(this);
+		column.Name = resultString;
+
+		if (MainViewModel.Instance.Settings.AutodetectKeys)
+		{
+			column.PredictTypeAndKey();
+		}
+
+		Columns.Add(column);
 	}
 
 	[RelayCommand]

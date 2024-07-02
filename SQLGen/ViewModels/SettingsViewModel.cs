@@ -17,6 +17,9 @@ public partial class SettingsViewModel : ObservableObject
 	[ObservableProperty]
 	private int _lineThickness = 2;
 
+	[ObservableProperty]
+	private bool _autodetectKeys = true;
+
 	partial void OnLineThicknessChanged(int value)
 	{
 		foreach (var line in MainViewModel.Instance.Tables.OfType<LineViewModel>())
