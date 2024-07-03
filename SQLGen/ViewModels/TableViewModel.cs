@@ -58,8 +58,8 @@ public partial class TableViewModel : SelectableElement
 	[RelayCommand]
 	private async Task AddColumn()
 	{
-		var settingsDialog = new Views.Controls.SimpleTextInputControl(string.Empty, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(settingsDialog, "RootDialog");
+		var textInputControl = new Views.Controls.SimpleTextInputControl(string.Empty, x => !string.IsNullOrWhiteSpace(x));
+		var result = await DialogHost.Show(textInputControl, "RootDialog");
 
 		if (result is not string resultString)
 		{
@@ -126,21 +126,6 @@ public partial class TableViewModel : SelectableElement
 		{
 			connections.Remove(item);
 		}
-	}
-
-	internal string? GenerateSQL(DBMS dbms)
-	{
-		if (Columns is null || Columns.Count == 0)
-		{
-			return string.Empty;
-		}
-
-		StringBuilder sql = new();
-		sql.AppendLine($"create table {Name} (");
-		sql.AppendLine(string.Join($",{Environment.NewLine}", Columns.Select(x => $"\t{x.GenerateSQL(dbms)}")));
-		sql.AppendLine($")");
-
-		return sql.ToString();
 	}
 
 	internal RelativePosition CalculateRelativePosition(TableViewModel to)

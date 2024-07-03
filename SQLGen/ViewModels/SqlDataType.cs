@@ -5,36 +5,23 @@ namespace SQLGen.ViewModels;
 
 public partial class SqlDataType : ObservableObject
 {
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasLength))]
-    [NotifyPropertyChangedFor(nameof(HasPrecision))]
-    private SqlDbType _type;
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(HasLength))]
+	[NotifyPropertyChangedFor(nameof(HasPrecision))]
+	private SqlDbType _type;
 
-    [ObservableProperty]
-    private int _length;
+	[ObservableProperty]
+	private int _length;
 
-    [ObservableProperty]
-    private int _precision;
+	[ObservableProperty]
+	private int _precision;
 
-    //Todo add missing types
-    private static readonly List<SqlDbType> _typesWithLength = [SqlDbType.Decimal, SqlDbType.Float, SqlDbType.NVarChar];
+	//Todo add missing types
+	private static readonly List<SqlDbType> _typesWithLength = [SqlDbType.Decimal, SqlDbType.Float, SqlDbType.NVarChar];
 
-    //Todo add missing types
-    private static readonly List<SqlDbType> _typesWithPrecision = [SqlDbType.Decimal, SqlDbType.Float];
+	//Todo add missing types
+	private static readonly List<SqlDbType> _typesWithPrecision = [SqlDbType.Decimal, SqlDbType.Float];
 
-    public bool HasLength => _typesWithLength.Contains(this.Type);
-    public bool HasPrecision => _typesWithPrecision.Contains(this.Type);
-
-    public string GenerateSQL()
-    {
-        if (HasLength && HasPrecision)
-        {
-            return $"{Type}({Length},{Precision})";
-        }
-        if (HasLength)
-        {
-            return $"{Type}({Length})";
-        }
-        return Type.ToString();
-    }
+	public bool HasLength => _typesWithLength.Contains(this.Type);
+	public bool HasPrecision => _typesWithPrecision.Contains(this.Type);
 }

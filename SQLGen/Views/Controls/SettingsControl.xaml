@@ -96,6 +96,33 @@
                 <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.AutodetectKeys}" />
             </Grid>
 
+            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Dark mode " />
+                <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.IsDarkModeEnabled}">
+                    <materialDesign:PackIcon>
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="materialDesign:PackIcon">
+                                <Setter Property="Kind" Value="WeatherNight" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Settings.IsDarkModeEnabled}" Value="True">
+                                        <Setter Property="Kind" Value="WeatherNight" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Settings.IsDarkModeEnabled}" Value="False">
+                                        <Setter Property="Kind" Value="WhiteBalanceSunny" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                </ToggleButton>
+            </Grid>
+
         </DockPanel>
 
         <Button Grid.Row="2"

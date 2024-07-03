@@ -20,6 +20,14 @@ public partial class SettingsViewModel : ObservableObject
 	[ObservableProperty]
 	private bool _autodetectKeys = true;
 
+	[ObservableProperty]
+	private bool _isDarkModeEnabled = true;
+
+	partial void OnIsDarkModeEnabledChanged(bool value)
+	{
+		Helpers.ThemeHelper.ToggleTheme(value);
+	}
+
 	partial void OnLineThicknessChanged(int value)
 	{
 		foreach (var line in MainViewModel.Instance.Tables.OfType<LineViewModel>())

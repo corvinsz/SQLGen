@@ -8,20 +8,12 @@ namespace SQLGen.Models;
 
 public enum RelativePosition
 {
-    //TopLeft,
-    Top,
-    //TopRight,
-    Right,
-    //BottomRight,
-    Bottom,
-    //BottomLeft,
-    Left
-}
-
-public enum DBMS
-{
-    MSSQLServer,
-    MySQL,
-    MariaDB,
-    PostgreSQL
+	//TopLeft,
+	Top,
+	//TopRight,
+	Right,
+	//BottomRight,
+	Bottom,
+	//BottomLeft,
+	Left
 }

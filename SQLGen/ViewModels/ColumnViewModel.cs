@@ -59,38 +59,6 @@ public partial class ColumnViewModel : SelectableElement
 		Name = resultString;
 	}
 
-	internal string? GenerateSQL(DBMS dbms)
-	{
-		switch (dbms)
-		{
-			case DBMS.MySQL:
-				break;
-			case DBMS.MariaDB:
-				break;
-			case DBMS.MSSQLServer:
-				return $"[{Name}] {DataType?.GenerateSQL()} {GenerateKeyConstraints(dbms)}";
-		}
-		throw new NotImplementedException();
-	}
-
-	private string GenerateKeyConstraints(DBMS dbms)
-	{
-		if (IsPrimaryKey && IsForeignKey)
-		{
-			//TODO
-			return "PRIMARY KEY IDENTITY(1,1)";
-		}
-		if (IsPrimaryKey)
-		{
-			return "PRIMARY KEY IDENTITY(1,1)";
-		}
-		if (IsForeignKey)
-		{
-			return "FOREIGN KEY REFERENCES <table>(ID)";
-		}
-		return string.Empty;
-	}
-
 	internal void PredictTypeAndKey()
 	{
 		if (string.IsNullOrWhiteSpace(Name))

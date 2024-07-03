@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,8 +56,6 @@ public partial class MainViewModel : ObservableObject
 		Tables.Add(tbl3);
 
 		Tables.Add(new LineViewModel(tbl, tbl2));
-
-		//string sql = SQLGenerator.Generate(Tables, DBMS.MSSQLServer);
 
 		Tables.CollectionChanged += Tables_CollectionChanged;
 	}
@@ -121,12 +120,29 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private void GenerateSQL()
 	{
-		string sql = Models.SQLGenerator.Generate(Tables.OfType<TableViewModel>(), Models.DBMS.MSSQLServer);
+		SQLGenerator.ISQLGenerator generator = new SQLGenerator.MSSQLServerGenerator();
+		string sql = generator.Generate(Tables.OfType<TableViewModel>());
+		//string sql = Models.SQLGenerator.Generate(Tables.OfType<TableViewModel>(), Models.DBMS.MSSQLServer);
 		MessageBox.Show(sql);
 	}
 
-	private void AddTable()
+	[RelayCommand]
+	private async Task AddTable()
 	{
-		Tables.Add(new TableViewModel() { X = 200, Y = 100 });
+		var textInputControl = new Views.Controls.SimpleTextInputControl(string.Empty, x => !string.IsNullOrWhiteSpace(x));
+		var result = await DialogHost.Show(textInputControl, "RootDialog");
+
+		if (result is not string resultString)
+		{
+			return;
+		}
+
+		var table = new TableViewModel();
+		table.Name = resultString;
+		table.X = 300;
+		table.Y = 300;
+		table.Width = 200;
+		table.Height = 200;
+		Tables.Add(table);
 	}
 }
