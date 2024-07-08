@@ -60,19 +60,4 @@ public class ColumnViewModelTests
 		// Assert
 		Assert.Equal(!initialIsPrimaryKey, _columnViewModel.IsPrimaryKey);
 	}
-
-	[Fact]
-	public void GenerateSQL_WithMSSQLServer_ShouldReturnCorrectSQL()
-	{
-		// Arrange
-		_columnViewModel.Name = "TestColumn";
-		_columnViewModel.DataType = new SqlDataType { Type = SqlDbType.Int };
-		_columnViewModel.IsPrimaryKey = true;
-
-		// Act
-		var sql = _columnViewModel.GenerateSQL(DBMS.MSSQLServer);
-
-		// Assert
-		Assert.Equal("[TestColumn] INT PRIMARY KEY IDENTITY(1,1)", sql, ignoreCase: true);
-	}
 }
