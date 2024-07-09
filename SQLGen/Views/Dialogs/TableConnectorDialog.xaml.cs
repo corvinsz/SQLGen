@@ -15,20 +15,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SQLGen.Views.Controls;
+namespace SQLGen.Views.Dialogs;
 /// <summary>
 /// Interaction logic for TableConnectorControl.xaml
 /// </summary>
-public partial class TableConnectorControl : UserControl
+public partial class TableConnectorDialog : UserControl
 {
-	public TableConnectorControl(IEnumerable<TableViewModel> availableTables)
-	{
-		InitializeComponent();
-		lbTables.ItemsSource = availableTables;
-	}
+    public TableConnectorDialog(IEnumerable<TableViewModel> availableTables)
+    {
+        InitializeComponent();
+        lbTables.ItemsSource = availableTables;
+    }
 
-	private void lbTables_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-	{
-		//DialogHost.CloseDialogCommand.Execute(lbTables.SelectedItem);
-	}
+    private void lbTables_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        //DialogHost.CloseDialogCommand.Execute(lbTables.SelectedItem);
+    }
 }

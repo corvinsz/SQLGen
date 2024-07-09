@@ -29,4 +29,13 @@ public static class ExtensionMethods
                 throw new NotImplementedException($"Method {nameof(GetOppositeSide)} is not fully implemented");
         }
     }
+
+    /// <summary>
+    /// Calling "Any()" on an IEnumerable *is* faster than "Count() > 0"
+    /// Due to readability I wrapped the Any() in an extension method
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static bool IsEmpty<T>(this IEnumerable<T> source) => !source.Any();
 }

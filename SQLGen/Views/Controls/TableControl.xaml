@@ -11,6 +11,11 @@
              Height="{Binding Height, Mode=TwoWay}"
              Background="Transparent"
              mc:Ignorable="d">
+    <UserControl.InputBindings>
+        <KeyBinding Key="N"
+                    Command="{Binding AddColumnCommand}"
+                    Modifiers="Ctrl" />
+    </UserControl.InputBindings>
     <UserControl.ContextMenu>
         <!--<ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">-->
         <ContextMenu>
@@ -80,7 +85,8 @@
                         HorizontalContentAlignment="Center"
                         Command="{Binding AddColumnCommand}"
                         Content="{materialDesign:PackIcon Kind=Plus}"
-                        DockPanel.Dock="Bottom" />
+                        DockPanel.Dock="Bottom"
+                        ToolTip="Add column (Ctrl+N)" />
                 <ListBox x:Name="lbColumns"
                          HorizontalContentAlignment="Stretch"
                          ItemsSource="{Binding Columns}"
@@ -99,8 +105,8 @@
                HorizontalAlignment="Right"
                VerticalAlignment="Bottom"
                Cursor="ScrollNW"
-               DragDelta="resizeThumbBottom_DragDelta"
-               MouseDoubleClick="resizeThumbBottom_MouseDoubleClick">
+               DragDelta="ResizeThumbBottom_DragDelta"
+               MouseDoubleClick="ResizeThumbBottom_MouseDoubleClick">
             <Thumb.Template>
                 <ControlTemplate>
                     <Rectangle Fill="{DynamicResource MaterialDesign.Brush.Primary.Dark}" Opacity=".5" />

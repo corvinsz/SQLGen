@@ -13,13 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SQLGen.Views.Controls;
+namespace SQLGen.Views.Dialogs;
 /// <summary>
 /// Interaction logic for SettingsControl.xaml
 /// </summary>
-public partial class SettingsControl : UserControl
+public partial class SettingsDialog : UserControl
 {
-    public SettingsControl()
+    public SettingsDialog()
     {
         InitializeComponent();
     }

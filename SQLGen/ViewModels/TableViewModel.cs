@@ -12,170 +12,180 @@ namespace SQLGen.ViewModels;
 
 public partial class TableViewModel : SelectableElement
 {
-	[ObservableProperty]
-	private string _name;
+    [ObservableProperty]
+    private string _name;
 
-	public ObservableCollection<ColumnViewModel> Columns { get; } = [];
+    public ObservableCollection<ColumnViewModel> Columns { get; } = [];
 
-	//Visual Properties
-	[ObservableProperty]
-	private double _x;
-	[ObservableProperty]
-	private double _y;
-	[ObservableProperty]
-	private double _height;
-	[ObservableProperty]
-	private double _width;
+    //Visual Properties
+    [ObservableProperty]
+    private double _x;
+    [ObservableProperty]
+    private double _y;
+    [ObservableProperty]
+    private double _height;
+    [ObservableProperty]
+    private double _width;
 
 
 
-	partial void OnXChanged(double value)
-	{
-		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
-		_x = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
-		VisualPropertyChanged?.Invoke(this, this);
-	}
-	partial void OnYChanged(double value)
-	{
-		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
-		_y = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
-		VisualPropertyChanged?.Invoke(this, this);
-	}
-	partial void OnHeightChanged(double value)
-	{
-		_height = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.SizeRounding);
-		VisualPropertyChanged?.Invoke(this, this);
-	}
+    partial void OnXChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+#pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        _x = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
+#pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        VisualPropertyChanged?.Invoke(this, this);
+    }
+    partial void OnYChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+#pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        _y = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
+#pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        VisualPropertyChanged?.Invoke(this, this);
+    }
+    partial void OnHeightChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+#pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        _height = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.SizeRounding);
+#pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        VisualPropertyChanged?.Invoke(this, this);
+    }
 
-	partial void OnWidthChanged(double value)
-	{
-		_width = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.SizeRounding);
-		VisualPropertyChanged?.Invoke(this, this);
-	}
+    partial void OnWidthChanged(double value)
+    {
+        //Setting the field is ok, otherwise a stackoverflowexception would be thrown
+#pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        _width = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.SizeRounding);
+#pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
+        VisualPropertyChanged?.Invoke(this, this);
+    }
 
-	public event EventHandler<TableViewModel> VisualPropertyChanged;
+    public event EventHandler<TableViewModel> VisualPropertyChanged;
 
-	[RelayCommand]
-	private async Task AddColumn()
-	{
-		var textInputControl = new Views.Controls.SimpleTextInputControl(string.Empty, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
+    [RelayCommand]
+    private async Task AddColumn()
+    {
+        var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
+        var result = await DialogHost.Show(textInputControl, "RootDialog");
 
-		if (result is not string resultString)
-		{
-			return;
-		}
+        if (result is not string resultString)
+        {
+            return;
+        }
 
-		var column = new ColumnViewModel(this);
-		column.Name = resultString;
+        var column = new ColumnViewModel(this);
+        column.Name = resultString;
 
-		if (MainViewModel.Instance.Settings.AutodetectKeys)
-		{
-			column.PredictTypeAndKey();
-		}
+        if (MainViewModel.Instance.Settings.AutodetectKeys)
+        {
+            column.PredictTypeAndKey();
+        }
 
-		Columns.Add(column);
-	}
+        Columns.Add(column);
+    }
 
-	[RelayCommand]
-	private async Task Rename()
-	{
-		var textInputControl = new Views.Controls.SimpleTextInputControl(Name, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
+    [RelayCommand]
+    private async Task Rename()
+    {
+        var textInputControl = new Views.Dialogs.SimpleTextInputDialog(Name, x => !string.IsNullOrWhiteSpace(x));
+        var result = await DialogHost.Show(textInputControl, "RootDialog");
 
-		if (result is not string resultString)
-		{
-			return;
-		}
+        if (result is not string resultString)
+        {
+            return;
+        }
 
-		Name = resultString;
-	}
+        Name = resultString;
+    }
 
-	[RelayCommand]
-	private async Task AddConnection()
-	{
-		var availableTables = MainViewModel.Instance.Tables.WhereTablesNotConnectedToThis(this);
+    [RelayCommand]
+    private async Task AddConnection()
+    {
+        var availableTables = MainViewModel.Instance.Tables.WhereTablesNotConnectedToThis(this);
 
-		var tableConnectorControl = new Views.Controls.TableConnectorControl(availableTables);
-		TableViewModel? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as TableViewModel;
+        var tableConnectorControl = new Views.Dialogs.TableConnectorDialog(availableTables);
+        TableViewModel? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as TableViewModel;
 
-		if (result is null)
-		{
-			return;
-		}
+        if (result is null)
+        {
+            return;
+        }
 
-		MainViewModel.Instance.Tables.Add(new LineViewModel(this, result));
-	}
+        MainViewModel.Instance.Tables.Add(new LineViewModel(this, result));
+    }
 
-	public void DeleteConnections(IList<SelectableElement> connections)
-	{
-		// Create a list to hold the items to be removed
-		var itemsToRemove = new List<LineViewModel>();
+    public void DeleteConnections(IList<SelectableElement> connections)
+    {
+        // Create a list to hold the items to be removed
+        var itemsToRemove = new List<LineViewModel>();
 
-		// Iterate over the collection and add items to the removal list
-		foreach (LineViewModel line in connections.OfType<LineViewModel>())
-		{
-			if (line.From == this || line.To == this)
-			{
-				itemsToRemove.Add(line);
-			}
-		}
+        // Iterate over the collection and add items to the removal list
+        foreach (LineViewModel line in connections.OfType<LineViewModel>())
+        {
+            if (line.From == this || line.To == this)
+            {
+                itemsToRemove.Add(line);
+            }
+        }
 
-		// Remove the items from the original collection
-		foreach (var item in itemsToRemove)
-		{
-			connections.Remove(item);
-		}
-	}
+        // Remove the items from the original collection
+        foreach (var item in itemsToRemove)
+        {
+            connections.Remove(item);
+        }
+    }
 
-	internal RelativePosition CalculateRelativePosition(TableViewModel to)
-	{
-		double centerX1 = this.X + (this.Width / 2);
-		double centerY1 = this.Y + (this.Height / 2);
-		double centerX2 = to.X + (to.Width / 2);
-		double centerY2 = to.Y + (to.Height / 2);
+    internal RelativePosition CalculateRelativePosition(TableViewModel to)
+    {
+        double centerX1 = this.X + (this.Width / 2);
+        double centerY1 = this.Y + (this.Height / 2);
+        double centerX2 = to.X + (to.Width / 2);
+        double centerY2 = to.Y + (to.Height / 2);
 
-		double deltaX = centerX2 - centerX1;
-		double deltaY = centerY2 - centerY1;
+        double deltaX = centerX2 - centerX1;
+        double deltaY = centerY2 - centerY1;
 
-		// Invert deltaY to account for the top-left origin of the WPF coordinate system
-		deltaY = -deltaY;
+        // Invert deltaY to account for the top-left origin of the WPF coordinate system
+        deltaY = -deltaY;
 
-		//Calculate angle
-		double angleInDegrees = Math.Atan2(deltaY, deltaX) * (180 / Math.PI);
+        //Calculate angle
+        double angleInDegrees = Math.Atan2(deltaY, deltaX) * (180 / Math.PI);
 
-		//Convert angle to enum
-		return DegreeToRelativePosition(angleInDegrees);
-	}
+        //Convert angle to enum
+        return DegreeToRelativePosition(angleInDegrees);
+    }
 
-	internal Point GetPointOfSide(RelativePosition side)
-	{
-		return side switch
-		{
-			RelativePosition.Top => new Point((X + Width / 2), Y),
-			RelativePosition.Right => new Point((X + Width), (Y + Height / 2)),
-			RelativePosition.Bottom => new Point((X + Width / 2), Y + Height),
-			RelativePosition.Left => new Point(X, Y + Height / 2),
-			_ => throw new NotImplementedException($"Method {nameof(GetPointOfSide)} is not fully implemented"),
-		};
-	}
+    internal Point GetPointOfSide(RelativePosition side)
+    {
+        return side switch
+        {
+            RelativePosition.Top => new Point((X + Width / 2), Y),
+            RelativePosition.Right => new Point((X + Width), (Y + Height / 2)),
+            RelativePosition.Bottom => new Point((X + Width / 2), Y + Height),
+            RelativePosition.Left => new Point(X, Y + Height / 2),
+            _ => throw new NotImplementedException($"Method {nameof(GetPointOfSide)} is not fully implemented"),
+        };
+    }
 
-	private static RelativePosition DegreeToRelativePosition(double angle)
-	{
-		angle = NormalizeAngle(angle);
+    private static RelativePosition DegreeToRelativePosition(double angle)
+    {
+        angle = NormalizeAngle(angle);
 
-		if (angle.IsBetween(45, 135)) return RelativePosition.Top;
-		if (angle.IsBetween(135, 225)) return RelativePosition.Left;
-		if (angle.IsBetween(225, 315)) return RelativePosition.Bottom;
-		return RelativePosition.Right;
-	}
+        if (angle.IsBetween(45, 135)) return RelativePosition.Top;
+        if (angle.IsBetween(135, 225)) return RelativePosition.Left;
+        if (angle.IsBetween(225, 315)) return RelativePosition.Bottom;
+        return RelativePosition.Right;
+    }
 
-	private static double NormalizeAngle(double angle)
-	{
-		if (angle < 0)
-		{
-			angle += 360;
-		}
-		return angle;
-	}
+    private static double NormalizeAngle(double angle)
+    {
+        if (angle < 0)
+        {
+            angle += 360;
+        }
+        return angle;
+    }
 }
