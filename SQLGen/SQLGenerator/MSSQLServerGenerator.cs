@@ -5,6 +5,8 @@ namespace SQLGen.SQLGenerator;
 
 public class MSSQLServerGenerator : ISQLGenerator
 {
+	public string Name => "Microsoft SQL Server";
+
 	public string Generate(IEnumerable<TableViewModel> tables)
 	{
 		StringBuilder sql = new();

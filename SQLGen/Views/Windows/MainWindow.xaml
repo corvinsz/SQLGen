@@ -67,7 +67,7 @@
 
                     <Button Height="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"
                             HorizontalAlignment="Stretch"
-                            Command="{Binding GenerateSQLCommand}"
+                            Command="{Binding Export.ShowExportDialogCommand}"
                             DockPanel.Dock="Top"
                             Style="{StaticResource MaterialDesignFlatButton}"
                             ToolTip="Generate SQL">
