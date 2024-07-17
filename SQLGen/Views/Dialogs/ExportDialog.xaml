@@ -8,6 +8,7 @@
              xmlns:viewmodels="clr-namespace:SQLGen.ViewModels"
              MinWidth="800"
              MinHeight="450"
+             MaxHeight="800"
              d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              mc:Ignorable="d">
     <Grid Margin="16" Grid.IsSharedSizeScope="True">
@@ -20,7 +21,7 @@
         <DockPanel Grid.Row="0">
             <Button Margin="20,0,0,0"
                     Background="Transparent"
-                    BorderThickness="0"
+                    BorderBrush="Transparent"
                     Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
                     Content="{materialDesign:PackIcon Kind=Close}"
                     DockPanel.Dock="Right"
@@ -39,16 +40,27 @@
 
         <DockPanel Grid.Row="1">
 
-            <ComboBox materialDesign:HintAssist.Hint="Select a dbms"
+            <ComboBox Margin="0,0,0,5"
+                      materialDesign:HintAssist.Hint="Select a dbms"
                       DisplayMemberPath="Name"
                       DockPanel.Dock="Top"
                       ItemsSource="{Binding Export.SQLGenerators}"
-                      SelectedItem="{Binding Export.SelectedGenerator}" />
+                      SelectedItem="{Binding Export.SelectedGenerator}"
+                      Style="{StaticResource MaterialDesignFilledComboBox}" />
 
-            <TextBox DockPanel.Dock="Top"
-                     IsReadOnly="True"
-                     Style="{StaticResource MaterialDesignFilledTextBox}"
-                     Text="{Binding Export.Query}" />
+            <Grid DockPanel.Dock="Top">
+                <TextBox IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignFilledTextBox}"
+                         Text="{Binding Export.Query}" />
+                <Button Width="50"
+                        Height="50"
+                        Margin="0,0,5,5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding Export.CopyQueryCommand}"
+                        Content="{materialDesign:PackIcon Kind=ContentCopy}"
+                        ToolTip="Copy" />
+            </Grid>
 
         </DockPanel>
 

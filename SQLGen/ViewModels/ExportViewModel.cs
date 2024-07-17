@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SQLGen.ViewModels;
 
@@ -41,5 +42,16 @@ public partial class ExportViewModel : ObservableObject
 	private async Task ShowExportDialog()
 	{
 		await DialogHost.Show(new Views.Dialogs.ExportDialog(), "RootDialog");
+	}
+
+	[RelayCommand]
+	private void CopyQuery()
+	{
+		if (String.IsNullOrEmpty(Query))
+		{
+			return;
+		}
+		Clipboard.SetText(Query);
+		MainViewModel.Instance.MessageService.ShowMessage("Query copied to clipboard");
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using MaterialDesignThemes.Wpf;
+using SQLGen.Helpers;
 using SQLGen.Models;
 using SQLGen.ViewModels;
 using System.Text;
@@ -19,70 +20,71 @@ namespace SQLGen.Windows;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private readonly MainViewModel _viewModel;
+	private readonly MainViewModel _viewModel;
 
-    public MainWindow()
-    {
-        InitializeComponent();
-        _viewModel = (MainViewModel)DataContext;
-    }
+	public MainWindow()
+	{
+		InitializeComponent();
+		_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
+		this.DataContext = _viewModel;
+	}
 
-    private void TableControl_PreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
-    {
-        int? index = ((FrameworkElement)sender).Tag as int?;
+	private void TableControl_PreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
+	{
+		int? index = ((FrameworkElement)sender).Tag as int?;
 
-        if (index is null)
-        {
-            return;
-        }
+		if (index is null)
+		{
+			return;
+		}
 
-        _viewModel.SelectedTable = _viewModel.Tables[index.Value];
-    }
+		_viewModel.SelectedTable = _viewModel.Tables[index.Value];
+	}
 
-    private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
-    {
-        if (_viewModel?.SelectedTable is not TableViewModel tbl)
-        {
-            return;
-        }
+	private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
+	{
+		if (_viewModel?.SelectedTable is not TableViewModel tbl)
+		{
+			return;
+		}
 
-        tbl.X += e.HorizontalChange;
-        tbl.Y += e.VerticalChange;
-        e.Handled = true;
-    }
+		tbl.X += e.HorizontalChange;
+		tbl.Y += e.VerticalChange;
+		e.Handled = true;
+	}
 
-    private async void Settings_Click(object sender, RoutedEventArgs e)
-    {
-        var settingsDialog = new Views.Dialogs.SettingsDialog();
-        await DialogHost.Show(settingsDialog, "RootDialog");
-    }
+	private async void Settings_Click(object sender, RoutedEventArgs e)
+	{
+		var settingsDialog = new Views.Dialogs.SettingsDialog();
+		await DialogHost.Show(settingsDialog, "RootDialog");
+	}
 
-    private void btnResizeTables_Click(object sender, RoutedEventArgs e)
-    {
-        var tables = Models.XAMLHelper.FindVisualChildren<Views.Controls.TableControl>(this);
+	private void btnResizeTables_Click(object sender, RoutedEventArgs e)
+	{
+		var tables = Models.XAMLHelper.FindVisualChildren<Views.Controls.TableControl>(this);
 
-        if (tables is null || tables.IsEmpty())
-        {
-            return;
-        }
+		if (tables is null || tables.IsEmpty())
+		{
+			return;
+		}
 
-        int resizedTablesCount = 0;
-        foreach (Views.Controls.TableControl table in tables)
-        {
-            bool didResize = table.DoAutoResize();
-            if (didResize)
-            {
-                resizedTablesCount++;
-            }
-        }
+		int resizedTablesCount = 0;
+		foreach (Views.Controls.TableControl table in tables)
+		{
+			bool didResize = table.DoAutoResize();
+			if (didResize)
+			{
+				resizedTablesCount++;
+			}
+		}
 
-        if (resizedTablesCount == 0)
-        {
-            mainSnackbar.MessageQueue.Enqueue($"All tables are already sized accordingly");
-        }
-        else
-        {
-            mainSnackbar.MessageQueue.Enqueue($"Successfully resized {resizedTablesCount} tables");
-        }
-    }
+		if (resizedTablesCount == 0)
+		{
+			_viewModel.MessageService.ShowMessage($"All tables are already sized accordingly");
+		}
+		else
+		{
+			_viewModel.MessageService.ShowMessage($"Successfully resized {resizedTablesCount} tables");
+		}
+	}
 }

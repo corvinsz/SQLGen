@@ -113,6 +113,23 @@
                 </ToggleButton>
             </Grid>
 
+            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                    <TextBlock VerticalAlignment="Center" Text="Duplicate warning" />
+                    <Grid VerticalAlignment="Center"
+                          Background="Transparent"
+                          ToolTip="If enabled, warn when having two tables or columns with the same name.">
+                        <materialDesign:PackIcon Kind="Info" />
+                    </Grid>
+                </StackPanel>
+                <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.WarnForDuplicates}" />
+            </Grid>
+
         </DockPanel>
 
         <Button Grid.Row="2"
