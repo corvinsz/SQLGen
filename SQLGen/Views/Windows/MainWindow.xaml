@@ -13,9 +13,6 @@
         Style="{StaticResource MaterialDesignWindow}"
         WindowState="Maximized"
         mc:Ignorable="d">
-    <Window.DataContext>
-        <viewModels:MainViewModel />
-    </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="Delete" Command="{Binding DeleteSelectedItemCommand}" />
     </Window.InputBindings>

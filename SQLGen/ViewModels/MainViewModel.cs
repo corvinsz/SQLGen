@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using SQLGen.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,9 +20,11 @@ public partial class MainViewModel : ObservableObject
 	private static MainViewModel _instance;
 	public static MainViewModel Instance => _instance;
 
-	public MainViewModel()
+	public MainViewModel(IMessageService<SnackbarMessageQueue> messageService)
 	{
 		_instance = this;
+		MessageService = messageService;
+
 		var tbl = new TableViewModel();
 		tbl.Name = "Farbe";
 		tbl.X = 0;
@@ -32,6 +35,10 @@ public partial class MainViewModel : ObservableObject
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "Bezeichnung", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "Temperatur", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Decimal, Length = 16, Precision = 9 } });
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ErstelltAm", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
+		Tables.Add(tbl);
+		Tables.Add(tbl);
+		Tables.Add(tbl);
+		Tables.Add(tbl);
 		Tables.Add(tbl);
 
 		var tbl2 = new TableViewModel();
@@ -62,20 +69,7 @@ public partial class MainViewModel : ObservableObject
 		Export = new ExportViewModel(Tables);
 	}
 
-	private void Tables_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-	{
-		if (e?.NewItems?.Count > 0 &&
-			e.NewItems is IEnumerable addItems)
-		{
-			foreach (var item in addItems)
-			{
-				if (item is LineViewModel line)
-				{
-					line.CalculateStartAndEndpoint();
-				}
-			}
-		}
-	}
+	public IMessageService<SnackbarMessageQueue> MessageService { get; }
 
 	public ObservableCollection<SelectableElement> Tables { get; } = [];
 
@@ -98,6 +92,21 @@ public partial class MainViewModel : ObservableObject
 	public SettingsViewModel Settings { get; } = new();
 	public ExportViewModel Export { get; }
 
+	private void Tables_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+	{
+		if (e?.NewItems?.Count > 0 &&
+			e.NewItems is IEnumerable addItems)
+		{
+			foreach (var item in addItems)
+			{
+				if (item is LineViewModel line)
+				{
+					line.CalculateStartAndEndpoint();
+				}
+			}
+		}
+	}
+
 	[RelayCommand]
 	private void DeleteSelectedItem()
 	{
@@ -118,15 +127,6 @@ public partial class MainViewModel : ObservableObject
 		}
 
 		Tables.Remove(SelectedTable);
-	}
-
-	[RelayCommand]
-	private void GenerateSQL()
-	{
-		SQLGenerator.ISQLGenerator generator = new SQLGenerator.MSSQLServerGenerator();
-		string sql = generator.Generate(Tables.OfType<TableViewModel>());
-		//string sql = Models.SQLGenerator.Generate(Tables.OfType<TableViewModel>(), Models.DBMS.MSSQLServer);
-		MessageBox.Show(sql);
 	}
 
 	[RelayCommand]
