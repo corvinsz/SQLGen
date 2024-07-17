@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +11,14 @@ using System.Threading.Tasks;
 namespace SQLGen.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
+	private const string DEFAULT_CONFIG_FILE = "defaultSettings.json";
+	private readonly string _configFile;
+	public SettingsViewModel(string configFile)
+	{
+		_configFile = configFile;
+		ReadConfig();
+	}
+
 	[ObservableProperty]
 	private int _positionRounding = 20;
 
@@ -36,6 +47,40 @@ public partial class SettingsViewModel : ObservableObject
 		foreach (var line in MainViewModel.Instance.Tables.OfType<LineViewModel>())
 		{
 			line.StrokeThickness = value;
+		}
+	}
+
+	public async Task SaveAsync()
+	{
+		string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
+		await File.WriteAllTextAsync(_configFile, jsonString);
+	}
+
+	public async Task ReadConfigAsync()
+	{
+		if (File.Exists(_configFile))
+		{
+			string jsonString = await File.ReadAllTextAsync(_configFile);
+			JsonConvert.PopulateObject(jsonString, this);
+		}
+	}
+
+	public void ReadConfig()
+	{
+		if (File.Exists(_configFile))
+		{
+			string jsonString = File.ReadAllText(_configFile);
+			JsonConvert.PopulateObject(jsonString, this);
+		}
+	}
+
+	[RelayCommand]
+	private async Task RestoreDefaultsAsync()
+	{
+		if (File.Exists(DEFAULT_CONFIG_FILE))
+		{
+			File.Copy(DEFAULT_CONFIG_FILE, _configFile, true);
+			await ReadConfigAsync();
 		}
 	}
 }

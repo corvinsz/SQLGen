@@ -71,13 +71,13 @@ public partial class TableViewModel : SelectableElement
 		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
 		var result = await DialogHost.Show(textInputControl, "RootDialog");
 
-		if (result is not string resultString)
+		if (result is not string newColumnName)
 		{
 			return;
 		}
 
 		var column = new ColumnViewModel(this);
-		column.Name = resultString;
+		column.Name = newColumnName;
 
 		if (MainViewModel.Instance.Settings.AutodetectKeys)
 		{
@@ -85,6 +85,28 @@ public partial class TableViewModel : SelectableElement
 		}
 
 		Columns.Add(column);
+
+		if (MainViewModel.Instance.Settings.WarnForDuplicates)
+		{
+			int existingColumnCount = Columns.Count(x => string.Equals(x.Name, newColumnName, StringComparison.InvariantCultureIgnoreCase));
+
+			if (existingColumnCount >= 2)
+			{
+				await ShowDuplicateColumnDialog(column);
+			}
+		}
+	}
+
+	private async Task ShowDuplicateColumnDialog(ColumnViewModel duplicateColumn)
+	{
+		string message = $"There are multiple columns with the name '{duplicateColumn.Name}'.";
+		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddColumn(duplicateColumn), message);
+		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
+	}
+
+	private void UndoAddColumn(ColumnViewModel columnToRemove)
+	{
+		Columns.Remove(columnToRemove);
 	}
 
 	[RelayCommand]

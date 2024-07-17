@@ -57,6 +57,7 @@ public partial class MainWindow : Window
 	{
 		var settingsDialog = new Views.Dialogs.SettingsDialog();
 		await DialogHost.Show(settingsDialog, "RootDialog");
+		await _viewModel.Settings.SaveAsync();
 	}
 
 	private void btnResizeTables_Click(object sender, RoutedEventArgs e)

@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -89,7 +90,7 @@ public partial class MainViewModel : ObservableObject
 		}
 	}
 
-	public SettingsViewModel Settings { get; } = new();
+	public SettingsViewModel Settings { get; } = new("settings.json");
 	public ExportViewModel Export { get; }
 
 	private void Tables_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -135,17 +136,39 @@ public partial class MainViewModel : ObservableObject
 		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
 		var result = await DialogHost.Show(textInputControl, "RootDialog");
 
-		if (result is not string resultString)
+		if (result is not string newTableName)
 		{
 			return;
 		}
 
 		var table = new TableViewModel();
-		table.Name = resultString;
+		table.Name = newTableName;
 		table.X = 300;
 		table.Y = 300;
 		table.Width = 200;
 		table.Height = 200;
 		Tables.Add(table);
+
+		if (MainViewModel.Instance.Settings.WarnForDuplicates)
+		{
+			int existingTableCount = Tables.OfType<TableViewModel>().Count(x => string.Equals(x.Name, newTableName, StringComparison.InvariantCultureIgnoreCase));
+
+			if (existingTableCount >= 2)
+			{
+				await ShowDuplicateTableDialog(table);
+			}
+		}
+	}
+
+	private async Task ShowDuplicateTableDialog(TableViewModel duplicateTable)
+	{
+		string message = $"There are multiple tables with the name '{duplicateTable.Name}'.";
+		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddTables(duplicateTable), message);
+		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
+	}
+
+	private void UndoAddTables(TableViewModel tableToRemove)
+	{
+		Tables.Remove(tableToRemove);
 	}
 }

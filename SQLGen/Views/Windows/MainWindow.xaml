@@ -9,7 +9,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
         x:Name="outerWindow"
-        Title="MainWindow"
+        Title="SQLGen"
         Style="{StaticResource MaterialDesignWindow}"
         WindowState="Maximized"
         mc:Ignorable="d">

@@ -5,6 +5,8 @@
              xmlns:local="clr-namespace:SQLGen.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:SQLGen.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
@@ -132,13 +134,20 @@
 
         </DockPanel>
 
-        <Button Grid.Row="2"
-                Margin="16,16,16,0"
-                HorizontalAlignment="Right"
-                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                Content="Close"
-                IsDefault="True"
-                Style="{StaticResource MaterialDesignFlatButton}" />
+        <DockPanel Grid.Row="2" LastChildFill="False">
+
+            <Button Command="{Binding Settings.RestoreDefaultsCommand}"
+                    Content="Restore defaults"
+                    DockPanel.Dock="Left"
+                    IsDefault="True" />
+
+            <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Content="Close"
+                    DockPanel.Dock="Right"
+                    IsDefault="True"
+                    Style="{StaticResource MaterialDesignFlatButton}" />
+            <!--  RestoreDefaultsAsync  -->
+        </DockPanel>
 
     </Grid>
 </UserControl>
