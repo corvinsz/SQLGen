@@ -37,10 +37,6 @@ public partial class MainViewModel : ObservableObject
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "Temperatur", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Decimal, Length = 16, Precision = 9 } });
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ErstelltAm", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		Tables.Add(tbl);
-		Tables.Add(tbl);
-		Tables.Add(tbl);
-		Tables.Add(tbl);
-		Tables.Add(tbl);
 
 		var tbl2 = new TableViewModel();
 		tbl2.Name = "Chemie";
