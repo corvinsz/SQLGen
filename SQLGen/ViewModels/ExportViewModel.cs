@@ -5,6 +5,7 @@ using SQLGen.SQLGenerator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,11 +32,23 @@ public partial class ExportViewModel : ObservableObject
 	public ExportViewModel(IEnumerable<SelectableElement> tables)
 	{
 		_tables = tables;
-		SQLGenerators = new List<ISQLGenerator>()
+		SQLGenerators = GetSQLProviders().ToList();
+	}
+
+	private IEnumerable<ISQLGenerator> GetSQLProviders()
+	{
+		// Get all types in the assembly
+		Type[] typesInAssembly = Assembly.GetExecutingAssembly().GetTypes();
+
+		// Find all classes that implement the ISQLGenerator interface
+		var sqlGeneratorTypes = typesInAssembly.Where(t => typeof(ISQLGenerator).IsAssignableFrom(t) && t.IsClass);
+
+		// Instantiate the classes
+		foreach (Type type in sqlGeneratorTypes)
 		{
-			new MSSQLServerGenerator(),
-			new MySQLGenerator()
-		};
+			ISQLGenerator sqlGenerator = (ISQLGenerator)Activator.CreateInstance(type)!;
+			yield return sqlGenerator;
+		}
 	}
 
 	[RelayCommand]
