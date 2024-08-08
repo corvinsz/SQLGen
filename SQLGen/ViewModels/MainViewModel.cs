@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using SQLGen.Helpers;
 using System;
 using System.Collections;
@@ -26,7 +27,7 @@ public partial class MainViewModel : ObservableObject
 		_instance = this;
 		MessageService = messageService;
 
-		var tbl = new TableViewModel();
+		var tbl = App.ServiceProvider.GetRequiredService<TableViewModel>();
 		tbl.Name = "Farbe";
 		tbl.X = 0;
 		tbl.Y = 0;
@@ -38,7 +39,7 @@ public partial class MainViewModel : ObservableObject
 		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ErstelltAm", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		Tables.Add(tbl);
 
-		var tbl2 = new TableViewModel();
+		var tbl2 = App.ServiceProvider.GetRequiredService<TableViewModel>();
 		tbl2.Name = "Chemie";
 		tbl2.X = 100;
 		tbl2.Y = 100;
@@ -49,7 +50,7 @@ public partial class MainViewModel : ObservableObject
 		tbl2.Columns.Add(new ColumnViewModel(tbl2) { Name = "Farbe_FK", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
 		Tables.Add(tbl2);
 
-		var tbl3 = new TableViewModel();
+		var tbl3 = App.ServiceProvider.GetRequiredService<TableViewModel>();
 		tbl3.Name = "Geruch";
 		tbl3.X = 300;
 		tbl3.Y = 100;
@@ -86,7 +87,7 @@ public partial class MainViewModel : ObservableObject
 		}
 	}
 
-	public SettingsViewModel Settings { get; } = new("settings.json");
+	public SettingsViewModel Settings { get; }
 	public ExportViewModel Export { get; }
 
 	private void Tables_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -137,7 +138,7 @@ public partial class MainViewModel : ObservableObject
 			return;
 		}
 
-		var table = new TableViewModel();
+		var table = App.ServiceProvider.GetRequiredService<TableViewModel>();
 		table.Name = newTableName;
 		table.X = 300;
 		table.Y = 300;

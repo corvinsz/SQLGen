@@ -1,4 +1,5 @@
 ﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using SQLGen.Helpers;
 using SQLGen.Models;
 using SQLGen.ViewModels;
@@ -25,8 +26,8 @@ public partial class MainWindow : Window
 	public MainWindow()
 	{
 		InitializeComponent();
-		_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
-		this.DataContext = _viewModel;
+		//_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
+		this.DataContext = App.ServiceProvider.GetService<MainViewModel>();
 	}
 
 	private void TableControl_PreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
