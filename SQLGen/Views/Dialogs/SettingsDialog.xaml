@@ -44,7 +44,7 @@
                 <materialDesign:NumericUpDown Grid.Column="1"
                                               Maximum="50"
                                               Minimum="1"
-                                              Value="{Binding Settings.PositionRounding}" />
+                                              Value="{Binding PositionRounding}" />
             </Grid>
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
@@ -57,7 +57,7 @@
                 <materialDesign:NumericUpDown Grid.Column="1"
                                               Maximum="50"
                                               Minimum="1"
-                                              Value="{Binding Settings.SizeRounding}" />
+                                              Value="{Binding SizeRounding}" />
             </Grid>
 
 
@@ -78,7 +78,7 @@
                 <materialDesign:NumericUpDown Grid.Column="1"
                                               Maximum="50"
                                               Minimum="1"
-                                              Value="{Binding Settings.LineThickness}" />
+                                              Value="{Binding LineThickness}" />
             </Grid>
 
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
@@ -95,7 +95,7 @@
                         <materialDesign:PackIcon Kind="Info" />
                     </Grid>
                 </StackPanel>
-                <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.AutodetectKeys}" />
+                <ToggleButton Grid.Column="1" IsChecked="{Binding AutodetectKeys}" />
             </Grid>
 
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
@@ -108,7 +108,7 @@
                            Text="Dark mode " />
                 <ToggleButton Grid.Column="1"
                               Content="{materialDesign:PackIcon Kind=WhiteBalanceSunny}"
-                              IsChecked="{Binding Settings.IsDarkModeEnabled}">
+                              IsChecked="{Binding IsDarkModeEnabled}">
                     <materialDesign:ToggleButtonAssist.OnContent>
                         <materialDesign:PackIcon Kind="WeatherNight" />
                     </materialDesign:ToggleButtonAssist.OnContent>
@@ -129,14 +129,14 @@
                         <materialDesign:PackIcon Kind="Info" />
                     </Grid>
                 </StackPanel>
-                <ToggleButton Grid.Column="1" IsChecked="{Binding Settings.WarnForDuplicates}" />
+                <ToggleButton Grid.Column="1" IsChecked="{Binding WarnForDuplicates}" />
             </Grid>
 
         </DockPanel>
 
         <DockPanel Grid.Row="2" LastChildFill="False">
 
-            <Button Command="{Binding Settings.RestoreDefaultsCommand}"
+            <Button Command="{Binding RestoreDefaultsCommand}"
                     Content="Restore defaults"
                     DockPanel.Dock="Left"
                     IsDefault="True" />
