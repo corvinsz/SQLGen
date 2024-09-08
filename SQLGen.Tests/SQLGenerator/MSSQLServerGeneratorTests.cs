@@ -1,12 +1,6 @@
 ﻿using Moq;
 using SQLGen.SQLGenerator;
 using SQLGen.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SQLGen.Tests.SQLGenerator;
 
@@ -18,7 +12,7 @@ public class MSSQLServerGeneratorTests
 		//Arrange
 		ISQLGenerator generator = new SQLGen.SQLGenerator.MSSQLServerGenerator();
 		var tables = new List<TableViewModel>();
-		var tableA = new TableViewModel();
+		var tableA = Mock.Of<TableViewModel>();
 		tableA.Name = "Person";
 		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
 		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "FirstName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });

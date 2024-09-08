@@ -44,27 +44,24 @@
                       materialDesign:HintAssist.Hint="Select a dbms"
                       DisplayMemberPath="Name"
                       DockPanel.Dock="Top"
-                      ItemsSource="{Binding Export.SQLGenerators}"
-                      SelectedItem="{Binding Export.SelectedGenerator}"
+                      ItemsSource="{Binding SQLGenerators}"
+                      SelectedItem="{Binding SelectedGenerator}"
                       Style="{StaticResource MaterialDesignFilledComboBox}" />
 
             <Grid DockPanel.Dock="Top">
                 <TextBox IsReadOnly="True"
                          Style="{StaticResource MaterialDesignFilledTextBox}"
-                         Text="{Binding Export.Query}" />
+                         Text="{Binding Query}" />
                 <Button Width="50"
                         Height="50"
                         Margin="0,0,5,5"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        Command="{Binding Export.CopyQueryCommand}"
+                        Command="{Binding CopyQueryCommand}"
                         Content="{materialDesign:PackIcon Kind=ContentCopy}"
                         ToolTip="Copy" />
             </Grid>
 
         </DockPanel>
-
-
-
     </Grid>
 </UserControl>

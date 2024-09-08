@@ -1,18 +1,11 @@
 ﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using SQLGen.Helpers;
 using SQLGen.Models;
 using SQLGen.ViewModels;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SQLGen.Windows;
 /// <summary>
@@ -25,7 +18,8 @@ public partial class MainWindow : Window
 	public MainWindow()
 	{
 		InitializeComponent();
-		_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
+		//_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
+		_viewModel = App.ServiceProvider.GetService<MainViewModel>();
 		this.DataContext = _viewModel;
 	}
 
@@ -57,7 +51,8 @@ public partial class MainWindow : Window
 	{
 		var settingsDialog = new Views.Dialogs.SettingsDialog();
 		await DialogHost.Show(settingsDialog, "RootDialog");
-		await _viewModel.Settings.SaveAsync();
+		var settings = App.ServiceProvider.GetRequiredService<SettingsViewModel>();
+		await settings.SaveAsync();
 	}
 
 	private void btnResizeTables_Click(object sender, RoutedEventArgs e)
@@ -79,13 +74,15 @@ public partial class MainWindow : Window
 			}
 		}
 
+		var messageService = App.ServiceProvider.GetRequiredService<IMessageService<SnackbarMessageQueue>>();
+
 		if (resizedTablesCount == 0)
 		{
-			_viewModel.MessageService.ShowMessage($"All tables are already sized accordingly");
+			messageService.ShowMessage($"All tables are already sized accordingly");
 		}
 		else
 		{
-			_viewModel.MessageService.ShowMessage($"Successfully resized {resizedTablesCount} tables");
+			messageService.ShowMessage($"Successfully resized {resizedTablesCount} tables");
 		}
 	}
 }

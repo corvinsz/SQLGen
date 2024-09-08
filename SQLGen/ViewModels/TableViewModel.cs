@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using SQLGen.Helpers;
 using SQLGen.Models;
 using System.Collections.ObjectModel;
@@ -13,6 +14,12 @@ namespace SQLGen.ViewModels;
 
 public partial class TableViewModel : SelectableElement
 {
+    private readonly SettingsViewModel _settings;
+    public TableViewModel(SettingsViewModel settings)
+    {
+        _settings = settings;
+    }
+
     [ObservableProperty]
     private string _name;
 
@@ -28,13 +35,11 @@ public partial class TableViewModel : SelectableElement
     [ObservableProperty]
     private double _width;
 
-
-
     partial void OnXChanged(double value)
     {
         //Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-        _x = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
+        _x = Helpers.MathHelper.RoundToNearestValue(value, _settings.PositionRounding);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
         VisualPropertyChanged?.Invoke(this, this);
     }
@@ -42,7 +47,7 @@ public partial class TableViewModel : SelectableElement
     {
         //Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-        _y = Helpers.MathHelper.RoundToNearestValue(value, MainViewModel.Instance.Settings.PositionRounding);
+        _y = Helpers.MathHelper.RoundToNearestValue(value, _settings.PositionRounding);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
         VisualPropertyChanged?.Invoke(this, this);
     }
@@ -50,7 +55,7 @@ public partial class TableViewModel : SelectableElement
     {
         //Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-        _height = Helpers.MathHelper.RoundToNextUpperInterval(value, MainViewModel.Instance.Settings.SizeRounding);
+        _height = Helpers.MathHelper.RoundToNextUpperInterval(value, _settings.SizeRounding);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
         VisualPropertyChanged?.Invoke(this, this);
     }
@@ -59,7 +64,7 @@ public partial class TableViewModel : SelectableElement
     {
         //Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-        _width = Helpers.MathHelper.RoundToNextUpperInterval(value, MainViewModel.Instance.Settings.SizeRounding);
+        _width = Helpers.MathHelper.RoundToNextUpperInterval(value, _settings.SizeRounding);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
         VisualPropertyChanged?.Invoke(this, this);
     }
@@ -80,14 +85,14 @@ public partial class TableViewModel : SelectableElement
         var column = new ColumnViewModel(this);
         column.Name = newColumnName;
 
-        if (MainViewModel.Instance.Settings.AutodetectKeys)
+        if (_settings.AutodetectKeys)
         {
             column.PredictTypeAndKey();
         }
 
         Columns.Add(column);
 
-        if (MainViewModel.Instance.Settings.WarnForDuplicates)
+        if (_settings.WarnForDuplicates)
         {
             int existingColumnCount = Columns.Count(x => string.Equals(x.Name, newColumnName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -127,7 +132,9 @@ public partial class TableViewModel : SelectableElement
     [RelayCommand]
     private async Task AddConnection()
     {
-        var availableTables = MainViewModel.Instance.Tables.WhereTablesNotConnectedToThis(this);
+        var mv = App.ServiceProvider.GetRequiredService<MainViewModel>();
+
+        var availableTables = mv.Tables.WhereTablesNotConnectedToThis(this);
 
         var tableConnectorControl = new Views.Dialogs.TableConnectorDialog(availableTables);
         TableViewModel? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as TableViewModel;
@@ -137,10 +144,10 @@ public partial class TableViewModel : SelectableElement
             return;
         }
 
-        MainViewModel.Instance.Tables.Add(new LineViewModel(this, result));
+        mv.Tables.Add(new LineViewModel(_settings, this, result));
     }
 
-    public void DeleteConnections(IList<SelectableElement> connections)
+    public void DeleteConnections(ICollection<SelectableElement> connections)
     {
         // Create a list to hold the items to be removed
         var itemsToRemove = new List<LineViewModel>();

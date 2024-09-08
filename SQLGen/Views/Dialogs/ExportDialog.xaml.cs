@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SQLGen.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +17,15 @@ using System.Windows.Shapes;
 
 namespace SQLGen.Views.Dialogs
 {
-	/// <summary>
-	/// Interaction logic for ExportDialog.xaml
-	/// </summary>
-	public partial class ExportDialog : UserControl
-	{
-		public ExportDialog()
-		{
-			InitializeComponent();
-		}
-	}
+    /// <summary>
+    /// Interaction logic for ExportDialog.xaml
+    /// </summary>
+    public partial class ExportDialog : UserControl
+    {
+        public ExportDialog()
+        {
+            InitializeComponent();
+            this.DataContext = App.ServiceProvider.GetRequiredService<ExportViewModel>();
+        }
+    }
 }

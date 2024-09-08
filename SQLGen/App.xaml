@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SQLGen"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="Views/Windows/MainWindow.xaml">
+             Startup="OnStartup">
+             <!--StartupUri="Views/Windows/MainWindow.xaml">-->
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,27 +13,6 @@
                                              SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <!--<Color x:Key="DarkModeColor">#202020</Color>
-            <Color x:Key="LightModeColor">#DDDDDD</Color>
-
-            <SolidColorBrush x:Key="DarkModeBrush" Color="{StaticResource DarkModeColor}" />
-            <SolidColorBrush x:Key="LightModeBrush" Color="{StaticResource LightModeColor}" />
-
-            <Style x:Key="CustomBrushStyle" TargetType="SolidColorBrush">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Source={x:Static materialDesign:ThemeAssist.BaseTheme}}" Value="Dark">
-                        <Setter Property="Color" Value="{StaticResource DarkModeColor}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Source={x:Static materialDesign:ThemeAssist.BaseTheme}}" Value="Light">
-                        <Setter Property="Color" Value="{StaticResource LightModeColor}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <SolidColorBrush x:Key="CustomBrush" Style="{StaticResource CustomBrushStyle}" />-->
-
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>
