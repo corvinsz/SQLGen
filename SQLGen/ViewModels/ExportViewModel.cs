@@ -15,55 +15,55 @@ namespace SQLGen.ViewModels;
 
 public partial class ExportViewModel : ObservableObject
 {
-    private readonly IMessageService<SnackbarMessageQueue> _messageService;
-    private readonly IEnumerable<SelectableElement> _tables;
+	private readonly IEnumerable<SelectableElement> _tables;
+	private readonly ISnackbarMessageQueue _messageQueue;
 
-    public IReadOnlyList<ISQLGenerator> SQLGenerators { get; }
+	public IReadOnlyList<ISQLGenerator> SQLGenerators { get; }
 
-    [ObservableProperty]
-    private ISQLGenerator _selectedGenerator;
+	[ObservableProperty]
+	private ISQLGenerator _selectedGenerator;
 
-    partial void OnSelectedGeneratorChanged(ISQLGenerator value)
-    {
-        Query = value?.Generate(_tables.OfType<TableViewModel>());
-    }
+	partial void OnSelectedGeneratorChanged(ISQLGenerator value)
+	{
+		Query = value?.Generate(_tables.OfType<TableViewModel>());
+	}
 
-    [ObservableProperty]
-    private string _query;
+	[ObservableProperty]
+	private string _query;
 
-    public ExportViewModel(IMessageService<SnackbarMessageQueue> messageService, MainViewModel mainViewModel)
-    {
-        _messageService = messageService;
-        _tables = mainViewModel.Tables;
-        SQLGenerators = GetSQLProviders().ToList();
-    }
+	public ExportViewModel(ISnackbarMessageQueue messageQueue, MainViewModel mainViewModel)
+	{
+		_messageQueue = messageQueue;
+		_tables = mainViewModel.Tables;
+		SQLGenerators = GetSQLProviders().ToList();
+	}
 
-    private IEnumerable<ISQLGenerator> GetSQLProviders()
-    {
-        // Get all types in the assembly
-        Type[] typesInAssembly = Assembly.GetExecutingAssembly().GetTypes();
+	private IEnumerable<ISQLGenerator> GetSQLProviders()
+	{
+		// Get all types in the assembly
+		Type[] typesInAssembly = Assembly.GetExecutingAssembly().GetTypes();
 
-        // Find all classes that implement the ISQLGenerator interface
-        var sqlGeneratorTypes = typesInAssembly.Where(t => typeof(ISQLGenerator).IsAssignableFrom(t) && t.IsClass);
+		// Find all classes that implement the ISQLGenerator interface
+		var sqlGeneratorTypes = typesInAssembly.Where(t => typeof(ISQLGenerator).IsAssignableFrom(t) && t.IsClass);
 
-        // Instantiate the classes
-        foreach (Type type in sqlGeneratorTypes)
-        {
-            ISQLGenerator sqlGenerator = (ISQLGenerator)Activator.CreateInstance(type)!;
-            yield return sqlGenerator;
-        }
-    }
+		// Instantiate the classes
+		foreach (Type type in sqlGeneratorTypes)
+		{
+			ISQLGenerator sqlGenerator = (ISQLGenerator)Activator.CreateInstance(type)!;
+			yield return sqlGenerator;
+		}
+	}
 
 
 
-    [RelayCommand]
-    private void CopyQuery()
-    {
-        if (String.IsNullOrEmpty(Query))
-        {
-            return;
-        }
-        Clipboard.SetText(Query);
-        _messageService.ShowMessage("Query copied to clipboard");
-    }
+	[RelayCommand]
+	private void CopyQuery()
+	{
+		if (String.IsNullOrEmpty(Query))
+		{
+			return;
+		}
+		Clipboard.SetText(Query);
+		_messageQueue.Enqueue("Query copied to clipboard");
+	}
 }

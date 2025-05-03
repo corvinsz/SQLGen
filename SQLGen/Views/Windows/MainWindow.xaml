@@ -178,9 +178,10 @@
                     </ItemsControl>
                 </ScrollViewer>
 
-                <materialDesign:Snackbar x:Name="mainSnackbar"
+                <materialDesign:Snackbar ActionButtonStyle="{StaticResource MaterialDesignSnackbarActionMidButton}" MessageQueue="{Binding MessageQueue}" />
+                <!--<materialDesign:Snackbar x:Name="mainSnackbar"
                                          Background="{DynamicResource MaterialDesign.Brush.Secondary.Dark}"
-                                         MessageQueue="{materialDesign:MessageQueue}" />
+                                         MessageQueue="{materialDesign:MessageQueue}" />-->
                 <!--</local:ZoomBorder>-->
             </Grid>
         </Grid>

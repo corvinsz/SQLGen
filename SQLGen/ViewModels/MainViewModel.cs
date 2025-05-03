@@ -44,9 +44,11 @@ public partial class MainViewModel : ObservableObject
 	#endregion
 
 	private readonly SettingsViewModel _settings;
+	public ISnackbarMessageQueue MessageQueue { get; }
 
-	public MainViewModel(SettingsViewModel settings)
+	public MainViewModel(ISnackbarMessageQueue messageQueue, SettingsViewModel settings)
 	{
+		MessageQueue = messageQueue ?? throw new ArgumentNullException(nameof(messageQueue));
 		_settings = settings;
 
 		InitDemoData();
@@ -127,6 +129,8 @@ public partial class MainViewModel : ObservableObject
 		table.Width = 200;
 		table.Height = 200;
 		Tables.Add(table);
+
+		MessageQueue.Enqueue($"The table '{newTableName}' has successfully been added");
 
 		if (_settings.WarnForDuplicates)
 		{

@@ -9,6 +9,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SQLGen;
 /// <summary>
@@ -16,30 +17,37 @@ namespace SQLGen;
 /// </summary>
 public partial class App : Application
 {
-    public static ServiceProvider ServiceProvider { get; private set; }
+	public static ServiceProvider ServiceProvider { get; private set; }
 
-    public App()
-    {
-        var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
-        ServiceProvider = serviceCollection.BuildServiceProvider();
-    }
+	public App()
+	{
+		var serviceCollection = new ServiceCollection();
+		ConfigureServices(serviceCollection);
+		ServiceProvider = serviceCollection.BuildServiceProvider();
+	}
 
-    private void ConfigureServices(IServiceCollection services)
-    {
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>();
-        services.AddSingleton<SettingsViewModel>(new SettingsViewModel("settings.json"));
-        services.AddSingleton<IMessageService<SnackbarMessageQueue>>(x => new SnackbarMessageService(new SnackbarMessageQueue()));
+	private void ConfigureServices(IServiceCollection services)
+	{
+		services.AddSingleton<MainViewModel>();
+		services.AddSingleton<MainWindow>();
+		services.AddSingleton<SettingsViewModel>(new SettingsViewModel("settings.json"));
 
-        services.AddTransient<ExportViewModel>();
-        services.AddTransient<TableViewModel>();
-    }
+		services.AddSingleton(_ => Current.Dispatcher);
 
-    private void OnStartup(object sender, StartupEventArgs e)
-    {
-        var mainWindow = ServiceProvider.GetService<MainWindow>();
-        mainWindow.Show();
-    }
+		services.AddSingleton<ISnackbarMessageQueue>(provider =>
+		{
+			Dispatcher dispatcher = provider.GetRequiredService<Dispatcher>();
+			return new SnackbarMessageQueue(TimeSpan.FromSeconds(2.0), dispatcher);
+		});
+
+		services.AddTransient<ExportViewModel>();
+		services.AddTransient<TableViewModel>();
+	}
+
+	private void OnStartup(object sender, StartupEventArgs e)
+	{
+		var mainWindow = ServiceProvider.GetService<MainWindow>();
+		mainWindow.Show();
+	}
 }
 

@@ -14,13 +14,15 @@ namespace SQLGen.Windows;
 public partial class MainWindow : Window
 {
 	private readonly MainViewModel _viewModel;
+	private readonly ISnackbarMessageQueue _messageQueue;
 
-	public MainWindow()
+	public MainWindow(ISnackbarMessageQueue messageQueue)
 	{
 		InitializeComponent();
 		//_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
-		_viewModel = App.ServiceProvider.GetService<MainViewModel>();
-		this.DataContext = _viewModel;
+		_viewModel = App.ServiceProvider.GetRequiredService<MainViewModel>();
+		_messageQueue = messageQueue;
+		DataContext = _viewModel;
 	}
 
 	private void TableControl_PreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
@@ -74,15 +76,13 @@ public partial class MainWindow : Window
 			}
 		}
 
-		var messageService = App.ServiceProvider.GetRequiredService<IMessageService<SnackbarMessageQueue>>();
-
 		if (resizedTablesCount == 0)
 		{
-			messageService.ShowMessage($"All tables are already sized accordingly");
+			_messageQueue.Enqueue($"All tables are already sized accordingly");
 		}
 		else
 		{
-			messageService.ShowMessage($"Successfully resized {resizedTablesCount} tables");
+			_messageQueue.Enqueue($"Successfully resized {resizedTablesCount} tables");
 		}
 	}
 }
