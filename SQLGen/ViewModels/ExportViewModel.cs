@@ -1,14 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
-using SQLGen.Helpers;
+using SQLGen.Models;
 using SQLGen.SQLGenerator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SQLGen.ViewModels;
@@ -25,7 +20,7 @@ public partial class ExportViewModel : ObservableObject
 
 	partial void OnSelectedGeneratorChanged(ISQLGenerator value)
 	{
-		Query = value?.Generate(_tables.OfType<TableViewModel>());
+		Query = value?.Generate(_tables.OfType<Table>());
 	}
 
 	[ObservableProperty]
@@ -40,13 +35,10 @@ public partial class ExportViewModel : ObservableObject
 
 	private IEnumerable<ISQLGenerator> GetSQLProviders()
 	{
-		// Get all types in the assembly
 		Type[] typesInAssembly = Assembly.GetExecutingAssembly().GetTypes();
 
-		// Find all classes that implement the ISQLGenerator interface
 		var sqlGeneratorTypes = typesInAssembly.Where(t => typeof(ISQLGenerator).IsAssignableFrom(t) && t.IsClass);
 
-		// Instantiate the classes
 		foreach (Type type in sqlGeneratorTypes)
 		{
 			ISQLGenerator sqlGenerator = (ISQLGenerator)Activator.CreateInstance(type)!;
@@ -54,12 +46,10 @@ public partial class ExportViewModel : ObservableObject
 		}
 	}
 
-
-
 	[RelayCommand]
 	private void CopyQuery()
 	{
-		if (String.IsNullOrEmpty(Query))
+		if (string.IsNullOrEmpty(Query))
 		{
 			return;
 		}

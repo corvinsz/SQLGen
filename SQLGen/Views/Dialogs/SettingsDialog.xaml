@@ -31,7 +31,7 @@
             <TextBlock DockPanel.Dock="Top"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                        Text="Snapping" />
-            <Separator Background="{DynamicResource MaterialDesign.Brush.Secondary}" DockPanel.Dock="Top" />
+            <Separator DockPanel.Dock="Top" />
 
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
@@ -65,7 +65,7 @@
                        DockPanel.Dock="Top"
                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                        Text="Other" />
-            <Separator Background="{DynamicResource MaterialDesign.Brush.Secondary}" DockPanel.Dock="Top" />
+            <Separator DockPanel.Dock="Top" />
 
             <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
@@ -130,6 +130,39 @@
                     </Grid>
                 </StackPanel>
                 <ToggleButton Grid.Column="1" IsChecked="{Binding WarnForDuplicates}" />
+            </Grid>
+
+
+            <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           FontSize="24"
+                           Text="Download new version" />
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="Check for a new version. If available, it will download, and you can restart the app to apply the changes."
+                           TextWrapping="Wrap" />
+
+                <StackPanel Grid.Row="1"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                    <Button Command="{Binding CheckForUpdatesUpdateCommand}" Content="Check for updates" />
+                    <Button Margin="4,0,0,0"
+                            Command="{Binding ApplyUpdateAndRestartCommand}"
+                            Content="Install update"
+                            Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                </StackPanel>
             </Grid>
 
         </DockPanel>

@@ -21,7 +21,7 @@ namespace SQLGen.Views.Dialogs;
 /// </summary>
 public partial class TableConnectorDialog : UserControl
 {
-    public TableConnectorDialog(IEnumerable<TableViewModel> availableTables)
+    public TableConnectorDialog(IEnumerable<Table> availableTables)
     {
         InitializeComponent();
         lbTables.ItemsSource = availableTables;

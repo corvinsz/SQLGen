@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Data;
 
-namespace SQLGen.ViewModels;
+namespace SQLGen.Models;
 
 public partial class SqlDataType : ObservableObject
 {

@@ -1,6 +1,12 @@
 ﻿using Moq;
 using SQLGen.SQLGenerator;
 using SQLGen.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SQLGen.Tests.SQLGenerator;
 
@@ -11,13 +17,13 @@ public class MSSQLServerGeneratorTests
 	{
 		//Arrange
 		ISQLGenerator generator = new SQLGen.SQLGenerator.MSSQLServerGenerator();
-		var tables = new List<TableViewModel>();
-		var tableA = Mock.Of<TableViewModel>();
+		var tables = new List<Table>();
+		var tableA = new Table();
 		tableA.Name = "Person";
-		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
-		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "FirstName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
-		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "LastName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
-		tableA.Columns.Add(new ColumnViewModel(tableA) { Name = "CreatedAt", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
+		tableA.Columns.Add(new Column(tableA) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
+		tableA.Columns.Add(new Column(tableA) { Name = "FirstName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
+		tableA.Columns.Add(new Column(tableA) { Name = "LastName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
+		tableA.Columns.Add(new Column(tableA) { Name = "CreatedAt", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		tables.Add(tableA);
 
 		string expected = @"create table Person (

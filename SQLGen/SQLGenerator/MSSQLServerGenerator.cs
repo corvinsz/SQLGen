@@ -1,4 +1,4 @@
-﻿using SQLGen.ViewModels;
+﻿using SQLGen.Models;
 using System.Text;
 
 namespace SQLGen.SQLGenerator;
@@ -7,10 +7,10 @@ public class MSSQLServerGenerator : ISQLGenerator
 {
 	public string Name => "Microsoft SQL Server";
 
-	public string Generate(IEnumerable<TableViewModel> tables)
+	public string Generate(IEnumerable<Table> tables)
 	{
 		StringBuilder sql = new();
-		foreach (TableViewModel table in tables)
+		foreach (Table table in tables)
 		{
 			sql.AppendLine(GenerateTable(table));
 			sql.AppendLine();
@@ -18,7 +18,7 @@ public class MSSQLServerGenerator : ISQLGenerator
 		return sql.ToString();
 	}
 
-	private string GenerateTable(TableViewModel table)
+	private string GenerateTable(Table table)
 	{
 		StringBuilder sql = new();
 		sql.AppendLine($"create table {table.Name} (");
@@ -27,7 +27,7 @@ public class MSSQLServerGenerator : ISQLGenerator
 		return sql.ToString();
 	}
 
-	private string GenerateColumn(ColumnViewModel column)
+	private string GenerateColumn(Column column)
 	{
 		return $"[{column.Name}] {GenerateDataType(column?.DataType)} {GenerateKeyConstraints(column)}";
 	}
@@ -45,7 +45,7 @@ public class MSSQLServerGenerator : ISQLGenerator
 		return type.Type.ToString();
 	}
 
-	private string GenerateKeyConstraints(ColumnViewModel column)
+	private string GenerateKeyConstraints(Column column)
 	{
 		if (column.IsPrimaryKey && column.IsForeignKey)
 		{

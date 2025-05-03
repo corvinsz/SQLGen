@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SQLGen.ViewModels;
+namespace SQLGen.Models;
 
 public abstract partial class SelectableElement : ObservableObject
 {
@@ -12,11 +12,11 @@ public abstract partial class SelectableElement : ObservableObject
 
 public static class SelectableElementExtensions
 {
-	public static List<TableViewModel> WhereTablesNotConnectedToThis(this IEnumerable<SelectableElement> items, TableViewModel table)
+	public static List<Table> WhereTablesNotConnectedToThis(this IEnumerable<SelectableElement> items, Table table)
 	{
-		var allTables = items.OfType<TableViewModel>().ToList();
+		var allTables = items.OfType<Table>().ToList();
 
-		foreach (LineViewModel connection in items.OfType<LineViewModel>())
+		foreach (Line connection in items.OfType<Line>())
 		{
 			if (connection.From == table || connection.To == table)
 			{

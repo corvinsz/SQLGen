@@ -118,10 +118,10 @@
                                         <Thumb.Style>
                                             <Style TargetType="Thumb">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:TableViewModel}">
+                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:Table}">
                                                         <Setter Property="Template" Value="{StaticResource TableTemplate}" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:LineViewModel}">
+                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:Line}">
                                                         <Setter Property="Template" Value="{StaticResource LineTemplate}" />
                                                     </DataTrigger>
 

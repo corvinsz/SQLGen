@@ -39,7 +39,7 @@ public partial class MainWindow : Window
 
 	private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
 	{
-		if (_viewModel?.SelectedTable is not TableViewModel tbl)
+		if (_viewModel?.SelectedTable is not Table tbl)
 		{
 			return;
 		}

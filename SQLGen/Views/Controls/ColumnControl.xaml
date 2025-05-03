@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sysData="clr-namespace:System.Data;assembly=netstandard"
              xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewModels:ColumnViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewModels:Column}"
              Background="Transparent"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
@@ -111,7 +111,7 @@
 
         <ComboBox Margin="20,0,0,0"
                   DockPanel.Dock="Right"
-                  ItemsSource="{x:Static viewModels:ColumnViewModel.SQLTypes}"
+                  ItemsSource="{x:Static viewModels:Column.SQLTypes}"
                   SelectedItem="{Binding DataType.Type}" />
 
         <TextBlock VerticalAlignment="Center"

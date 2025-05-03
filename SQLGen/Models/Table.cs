@@ -10,20 +10,14 @@ using System.IO.IsolatedStorage;
 using System.Text;
 using System.Windows;
 
-namespace SQLGen.ViewModels;
+namespace SQLGen.Models;
 
-public partial class TableViewModel : SelectableElement
+public partial class Table : SelectableElement
 {
-	private readonly SettingsViewModel _settings;
-	public TableViewModel(SettingsViewModel settings)
-	{
-		_settings = settings;
-	}
-
 	[ObservableProperty]
 	private string _name;
 
-	public ObservableCollection<ColumnViewModel> Columns { get; } = [];
+	public ObservableCollection<Column> Columns { get; } = [];
 
 	//Visual Properties
 	[ObservableProperty]
@@ -39,7 +33,7 @@ public partial class TableViewModel : SelectableElement
 	{
 		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-		_x = Helpers.MathHelper.RoundToNearestValue(value, _settings.PositionRounding);
+		_x = Helpers.MathHelper.RoundToNearestValue(value, /* TODO */ 8);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
 		VisualPropertyChanged?.Invoke(this, this);
 	}
@@ -47,7 +41,7 @@ public partial class TableViewModel : SelectableElement
 	{
 		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-		_y = Helpers.MathHelper.RoundToNearestValue(value, _settings.PositionRounding);
+		_y = Helpers.MathHelper.RoundToNearestValue(value, /* TODO */ 8);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
 		VisualPropertyChanged?.Invoke(this, this);
 	}
@@ -55,7 +49,7 @@ public partial class TableViewModel : SelectableElement
 	{
 		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-		_height = Helpers.MathHelper.RoundToNextUpperInterval(value, _settings.SizeRounding);
+		_height = Helpers.MathHelper.RoundToNextUpperInterval(value, /* TODO */ 8);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
 		VisualPropertyChanged?.Invoke(this, this);
 	}
@@ -64,12 +58,12 @@ public partial class TableViewModel : SelectableElement
 	{
 		//Setting the field is ok, otherwise a stackoverflowexception would be thrown
 #pragma warning disable MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
-		_width = Helpers.MathHelper.RoundToNextUpperInterval(value, _settings.SizeRounding);
+		_width = Helpers.MathHelper.RoundToNextUpperInterval(value, /* TODO */ 8);
 #pragma warning restore MVVMTK0034 // Direct field reference to [ObservableProperty] backing field
 		VisualPropertyChanged?.Invoke(this, this);
 	}
 
-	public event EventHandler<TableViewModel> VisualPropertyChanged;
+	public event EventHandler<Table> VisualPropertyChanged;
 
 	[RelayCommand]
 	private async Task AddColumn()
@@ -82,17 +76,19 @@ public partial class TableViewModel : SelectableElement
 			return;
 		}
 
-		var column = new ColumnViewModel(this);
+		var column = new Column(this);
 		column.Name = newColumnName;
 
-		if (_settings.AutodetectKeys)
-		{
-			column.PredictTypeAndKey();
-		}
+		// TODO
+		//if (_settings.AutodetectKeys)
+		//{
+		//	column.PredictTypeAndKey();
+		//}
 
 		Columns.Add(column);
 
-		if (_settings.WarnForDuplicates)
+		// TODO
+		//if (_settings.WarnForDuplicates)
 		{
 			int existingColumnCount = Columns.Count(x => string.Equals(x.Name, newColumnName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -103,14 +99,14 @@ public partial class TableViewModel : SelectableElement
 		}
 	}
 
-	private async Task ShowDuplicateColumnDialog(ColumnViewModel duplicateColumn)
+	private async Task ShowDuplicateColumnDialog(Column duplicateColumn)
 	{
 		string message = $"There are multiple columns with the name '{duplicateColumn.Name}'.";
 		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddColumn(duplicateColumn), message);
 		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
 	}
 
-	private void UndoAddColumn(ColumnViewModel columnToRemove)
+	private void UndoAddColumn(Column columnToRemove)
 	{
 		Columns.Remove(columnToRemove);
 	}
@@ -137,23 +133,23 @@ public partial class TableViewModel : SelectableElement
 		var availableTables = mv.Tables.WhereTablesNotConnectedToThis(this);
 
 		var tableConnectorControl = new Views.Dialogs.TableConnectorDialog(availableTables);
-		TableViewModel? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as TableViewModel;
+		Table? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as Table;
 
 		if (result is null)
 		{
 			return;
 		}
 
-		mv.Tables.Add(new LineViewModel(_settings, this, result));
+		mv.Tables.Add(new Line(_settings, this, result));
 	}
 
 	public void DeleteConnections(ICollection<SelectableElement> connections)
 	{
 		// Create a list to hold the items to be removed
-		var itemsToRemove = new List<LineViewModel>();
+		var itemsToRemove = new List<Line>();
 
 		// Iterate over the collection and add items to the removal list
-		foreach (LineViewModel line in connections.OfType<LineViewModel>())
+		foreach (Line line in connections.OfType<Line>())
 		{
 			if (line.From == this || line.To == this)
 			{
@@ -168,7 +164,7 @@ public partial class TableViewModel : SelectableElement
 		}
 	}
 
-	internal RelativePosition CalculateRelativePosition(TableViewModel to)
+	internal RelativePosition CalculateRelativePosition(Table to)
 	{
 		double centerX1 = this.X + (this.Width / 2);
 		double centerY1 = this.Y + (this.Height / 2);

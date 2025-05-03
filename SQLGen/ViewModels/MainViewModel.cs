@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
+using SQLGen.Models;
+using SQLGen.Services;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -13,44 +15,48 @@ public partial class MainViewModel : ObservableObject
 	#region Demo-Data
 	private void InitDemoData()
 	{
-		var tbl = App.ServiceProvider.GetRequiredService<TableViewModel>();
+		var tbl = App.ServiceProvider.GetRequiredService<Table>();
 		tbl.Name = "Farbe";
 		tbl.Name = "Author";
 		tbl.X = 0;
 		tbl.Y = 0;
 		tbl.Height = 80;
 		tbl.Width = 80;
-		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
-		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "FirstName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
-		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "LastName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
-		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "Birthdate", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Decimal, Length = 16, Precision = 9 } });
-		tbl.Columns.Add(new ColumnViewModel(tbl) { Name = "CreatedAt", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
+		tbl.Columns.Add(new Column(tbl) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
+		tbl.Columns.Add(new Column(tbl) { Name = "FirstName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
+		tbl.Columns.Add(new Column(tbl) { Name = "LastName", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
+		tbl.Columns.Add(new Column(tbl) { Name = "Birthdate", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Decimal, Length = 16, Precision = 9 } });
+		tbl.Columns.Add(new Column(tbl) { Name = "CreatedAt", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		Tables.Add(tbl);
 
-		var tbl2 = App.ServiceProvider.GetRequiredService<TableViewModel>();
+		var tbl2 = App.ServiceProvider.GetRequiredService<Table>();
 		tbl2.Name = "Book";
 		tbl2.X = 100;
 		tbl2.Y = 100;
 		tbl2.Height = 90;
 		tbl2.Width = 90;
-		tbl2.Columns.Add(new ColumnViewModel(tbl2) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
-		tbl2.Columns.Add(new ColumnViewModel(tbl2) { Name = "Author_FK", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
-		tbl2.Columns.Add(new ColumnViewModel(tbl2) { Name = "Name", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
-		tbl2.Columns.Add(new ColumnViewModel(tbl2) { Name = "ReleaseDate", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
+		tbl2.Columns.Add(new Column(tbl2) { Name = "ID", IsPrimaryKey = true, DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
+		tbl2.Columns.Add(new Column(tbl2) { Name = "Author_FK", DataType = new SqlDataType() { Type = System.Data.SqlDbType.Int } });
+		tbl2.Columns.Add(new Column(tbl2) { Name = "Name", DataType = new SqlDataType() { Type = System.Data.SqlDbType.NVarChar, Length = 256 } });
+		tbl2.Columns.Add(new Column(tbl2) { Name = "ReleaseDate", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		Tables.Add(tbl2);
 
-		Tables.Add(new LineViewModel(_settings, tbl, tbl2));
+		Tables.Add(new Line(_settings, tbl, tbl2));
 	}
 	#endregion
 
 	private readonly SettingsViewModel _settings;
+	private readonly IDialogService _dialogService;
+
 	public ISnackbarMessageQueue MessageQueue { get; }
 
-	public MainViewModel(ISnackbarMessageQueue messageQueue, SettingsViewModel settings)
+	public MainViewModel(ISnackbarMessageQueue messageQueue,
+						 SettingsViewModel settings,
+						 IDialogService dialogService)
 	{
 		MessageQueue = messageQueue ?? throw new ArgumentNullException(nameof(messageQueue));
 		_settings = settings;
-
+		_dialogService = dialogService ?? throw new ArgumentNullException(nameof(messageQueue));
 		InitDemoData();
 
 		Tables.CollectionChanged += Tables_CollectionChanged;
@@ -81,7 +87,7 @@ public partial class MainViewModel : ObservableObject
 		{
 			foreach (var item in addItems)
 			{
-				if (item is LineViewModel line)
+				if (item is Line line)
 				{
 					line.CalculateStartAndEndpoint();
 				}
@@ -103,7 +109,7 @@ public partial class MainViewModel : ObservableObject
 			return;
 		}
 
-		if (SelectedTable is TableViewModel table)
+		if (SelectedTable is Table table)
 		{
 			table.DeleteConnections(Tables);
 		}
@@ -122,19 +128,21 @@ public partial class MainViewModel : ObservableObject
 			return;
 		}
 
-		var table = App.ServiceProvider.GetRequiredService<TableViewModel>();
-		table.Name = newTableName;
-		table.X = 300;
-		table.Y = 300;
-		table.Width = 200;
-		table.Height = 200;
+		var table = new Table
+		{
+			Name = newTableName,
+			X = 300,
+			Y = 300,
+			Width = 200,
+			Height = 200
+		};
 		Tables.Add(table);
 
 		MessageQueue.Enqueue($"The table '{newTableName}' has successfully been added");
 
 		if (_settings.WarnForDuplicates)
 		{
-			int existingTableCount = Tables.OfType<TableViewModel>().Count(x => string.Equals(x.Name, newTableName, StringComparison.InvariantCultureIgnoreCase));
+			int existingTableCount = Tables.OfType<Table>().Count(x => string.Equals(x.Name, newTableName, StringComparison.InvariantCultureIgnoreCase));
 
 			if (existingTableCount >= 2)
 			{
@@ -143,14 +151,14 @@ public partial class MainViewModel : ObservableObject
 		}
 	}
 
-	private async Task ShowDuplicateTableDialog(TableViewModel duplicateTable)
+	private async Task ShowDuplicateTableDialog(Table duplicateTable)
 	{
 		string message = $"There are multiple tables with the name '{duplicateTable.Name}'.";
 		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddTables(duplicateTable), message);
 		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
 	}
 
-	private void UndoAddTables(TableViewModel tableToRemove)
+	private void UndoAddTables(Table tableToRemove)
 	{
 		Tables.Remove(tableToRemove);
 	}
