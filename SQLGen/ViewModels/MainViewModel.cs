@@ -245,4 +245,15 @@ public partial class MainViewModel : ObservableObject
 
 		Tables.Add(new Line(_settings, table, result));
 	}
+
+	private Lazy<ReleaseNotes.ReleaseNotesDialog> _releaseNotesDialog = new(() => new ReleaseNotes.ReleaseNotesDialog());
+	[RelayCommand]
+	private async Task ShowReleaseNotes()
+	{
+		if (DialogHost.IsDialogOpen("RootDialog"))
+		{
+			DialogHost.Close("RootDialog");
+		}
+		await DialogHost.Show(_releaseNotesDialog.Value, "RootDialog");
+	}
 }

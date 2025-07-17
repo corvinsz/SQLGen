@@ -90,6 +90,15 @@
                                                  Height="auto"
                                                  Kind="Gear" />
                     </Button>
+                    <Button Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding ShowReleaseNotesCommand}"
+                            DockPanel.Dock="Bottom"
+                            Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Width="auto"
+                                                 Height="auto"
+                                                 Kind="Notes" />
+                    </Button>
                 </DockPanel>
             </materialDesign:Card>
 
