@@ -7,6 +7,7 @@ using SQLGen.Services;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace SQLGen.ViewModels;
 
@@ -15,7 +16,7 @@ public partial class MainViewModel : ObservableObject
 	#region Demo-Data
 	private void InitDemoData()
 	{
-		var tbl = App.ServiceProvider.GetRequiredService<Table>();
+		var tbl = new Table();
 		tbl.Name = "Farbe";
 		tbl.Name = "Author";
 		tbl.X = 0;
@@ -29,7 +30,7 @@ public partial class MainViewModel : ObservableObject
 		tbl.Columns.Add(new Column(tbl) { Name = "CreatedAt", DataType = new SqlDataType() { Type = System.Data.SqlDbType.DateTime2 } });
 		Tables.Add(tbl);
 
-		var tbl2 = App.ServiceProvider.GetRequiredService<Table>();
+		var tbl2 = new Table();
 		tbl2.Name = "Book";
 		tbl2.X = 100;
 		tbl2.Y = 100;
@@ -121,7 +122,7 @@ public partial class MainViewModel : ObservableObject
 	private async Task AddTable()
 	{
 		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
+		var result = await _dialogService.Show(textInputControl, "RootDialog");
 
 		if (result is not string newTableName)
 		{
@@ -151,6 +152,66 @@ public partial class MainViewModel : ObservableObject
 		}
 	}
 
+	[RelayCommand]
+	private async Task AddColumn(Table table)
+	{
+		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
+		var result = await _dialogService.Show(textInputControl, "RootDialog");
+
+		if (result is not string newColumnName)
+		{
+			return;
+		}
+
+		var column = new Column(table);
+		column.Name = newColumnName;
+
+		// TODO
+		//if (_settings.AutodetectKeys)
+		//{
+		//	column.PredictTypeAndKey();
+		//}
+
+		table.Columns.Add(column);
+
+		// TODO
+		//if (_settings.WarnForDuplicates)
+		{
+			int existingColumnCount = table.Columns.Count(x => string.Equals(x.Name, newColumnName, StringComparison.InvariantCultureIgnoreCase));
+
+			if (existingColumnCount >= 2)
+			{
+				await ShowDuplicateColumnDialog(column);
+			}
+		}
+
+		async Task ShowDuplicateColumnDialog(Column duplicateColumn)
+		{
+			string message = $"There are multiple columns with the name '{duplicateColumn.Name}'.";
+			var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddColumn(duplicateColumn), message);
+			await _dialogService.Show(duplicateWarningDialog, "RootDialog");
+		}
+
+		void UndoAddColumn(Column columnToRemove)
+		{
+			table.Columns.Remove(columnToRemove);
+		}
+	}
+
+	[RelayCommand]
+	private async Task Rename(INameable nameable)
+	{
+		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(nameable.Name, x => !string.IsNullOrWhiteSpace(x));
+		var result = await DialogHost.Show(textInputControl, "RootDialog");
+
+		if (result is not string resultString)
+		{
+			return;
+		}
+
+		nameable.Name = resultString;
+	}
+
 	private async Task ShowDuplicateTableDialog(Table duplicateTable)
 	{
 		string message = $"There are multiple tables with the name '{duplicateTable.Name}'.";
@@ -167,5 +228,21 @@ public partial class MainViewModel : ObservableObject
 	private async Task ShowExportDialog()
 	{
 		await DialogHost.Show(new Views.Dialogs.ExportDialog(), "RootDialog");
+	}
+
+	[RelayCommand]
+	private async Task AddConnection(Table table)
+	{
+		var availableTables = Tables.WhereTablesNotConnectedToThis(table);
+
+		var tableConnectorControl = new Views.Dialogs.TableConnectorDialog(availableTables);
+		Table? result = await _dialogService.Show(tableConnectorControl, "RootDialog") as Table;
+
+		if (result is null)
+		{
+			return;
+		}
+
+		Tables.Add(new Line(_settings, table, result));
 	}
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SQLGen.Models;
 
-public partial class Column : SelectableElement
+public partial class Column : SelectableElement, INameable
 {
 	private readonly Table _parentTable;
 
@@ -44,20 +44,6 @@ public partial class Column : SelectableElement
 
 	[RelayCommand]
 	private void TogglePrimaryKey() => IsPrimaryKey = !IsPrimaryKey;
-
-	[RelayCommand]
-	private async Task Rename()
-	{
-		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(Name, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
-
-		if (result is not string resultString)
-		{
-			return;
-		}
-
-		Name = resultString;
-	}
 
 	internal void PredictTypeAndKey()
 	{

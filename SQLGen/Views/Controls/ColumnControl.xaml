@@ -5,14 +5,15 @@
              xmlns:local="clr-namespace:SQLGen.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:SQLGen.Models"
              xmlns:sysData="clr-namespace:System.Data;assembly=netstandard"
              xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewModels:Column}"
+             d:DataContext="{d:DesignInstance Type=models:Column}"
              Background="Transparent"
              mc:Ignorable="d">
     <UserControl.ContextMenu>
         <ContextMenu>
-            <MenuItem Command="{Binding RenameCommand}">
+            <MenuItem Command="{Binding DataContext.RenameCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .}">
                 <MenuItem.Header>
                     <DockPanel>
                         <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Pen" />
@@ -111,7 +112,7 @@
 
         <ComboBox Margin="20,0,0,0"
                   DockPanel.Dock="Right"
-                  ItemsSource="{x:Static viewModels:Column.SQLTypes}"
+                  ItemsSource="{x:Static models:Column.SQLTypes}"
                   SelectedItem="{Binding DataType.Type}" />
 
         <TextBlock VerticalAlignment="Center"

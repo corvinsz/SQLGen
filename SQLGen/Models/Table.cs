@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace SQLGen.Models;
 
-public partial class Table : SelectableElement
+public partial class Table : SelectableElement, INameable
 {
 	[ObservableProperty]
 	private string _name;
@@ -65,90 +65,10 @@ public partial class Table : SelectableElement
 
 	public event EventHandler<Table> VisualPropertyChanged;
 
-	[RelayCommand]
-	private async Task AddColumn()
-	{
-		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
-
-		if (result is not string newColumnName)
-		{
-			return;
-		}
-
-		var column = new Column(this);
-		column.Name = newColumnName;
-
-		// TODO
-		//if (_settings.AutodetectKeys)
-		//{
-		//	column.PredictTypeAndKey();
-		//}
-
-		Columns.Add(column);
-
-		// TODO
-		//if (_settings.WarnForDuplicates)
-		{
-			int existingColumnCount = Columns.Count(x => string.Equals(x.Name, newColumnName, StringComparison.InvariantCultureIgnoreCase));
-
-			if (existingColumnCount >= 2)
-			{
-				await ShowDuplicateColumnDialog(column);
-			}
-		}
-	}
-
-	private async Task ShowDuplicateColumnDialog(Column duplicateColumn)
-	{
-		string message = $"There are multiple columns with the name '{duplicateColumn.Name}'.";
-		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddColumn(duplicateColumn), message);
-		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
-	}
-
-	private void UndoAddColumn(Column columnToRemove)
-	{
-		Columns.Remove(columnToRemove);
-	}
-
-	[RelayCommand]
-	private async Task Rename()
-	{
-		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(Name, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
-
-		if (result is not string resultString)
-		{
-			return;
-		}
-
-		Name = resultString;
-	}
-
-	[RelayCommand]
-	private async Task AddConnection()
-	{
-		var mv = App.ServiceProvider.GetRequiredService<MainViewModel>();
-
-		var availableTables = mv.Tables.WhereTablesNotConnectedToThis(this);
-
-		var tableConnectorControl = new Views.Dialogs.TableConnectorDialog(availableTables);
-		Table? result = await DialogHost.Show(tableConnectorControl, "RootDialog") as Table;
-
-		if (result is null)
-		{
-			return;
-		}
-
-		mv.Tables.Add(new Line(_settings, this, result));
-	}
-
 	public void DeleteConnections(ICollection<SelectableElement> connections)
 	{
-		// Create a list to hold the items to be removed
 		var itemsToRemove = new List<Line>();
 
-		// Iterate over the collection and add items to the removal list
 		foreach (Line line in connections.OfType<Line>())
 		{
 			if (line.From == this || line.To == this)
@@ -157,7 +77,6 @@ public partial class Table : SelectableElement
 			}
 		}
 
-		// Remove the items from the original collection
 		foreach (var item in itemsToRemove)
 		{
 			connections.Remove(item);

@@ -21,9 +21,10 @@ namespace SQLGen.Views.Dialogs;
 /// </summary>
 public partial class SettingsDialog : UserControl
 {
-    public SettingsDialog()
-    {
-        InitializeComponent();
-        this.DataContext = App.ServiceProvider.GetRequiredService<SettingsViewModel>();
-    }
+	public SettingsDialog(SettingsViewModel viewModel)
+	{
+		DataContext = viewModel;
+		InitializeComponent();
+		//this.DataContext = App.ServiceProvider.GetRequiredService<SettingsViewModel>();
+	}
 }

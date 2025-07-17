@@ -6,11 +6,16 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:SQLGen.ViewModels"
+             MaxWidth="600"
+             Padding="16"
              d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
-    <Grid Margin="16" Grid.IsSharedSizeScope="True">
+    <UserControl.Resources>
+        <Thickness x:Key="Spacing">0 0 0 8</Thickness>
+    </UserControl.Resources>
+    <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto " />
             <RowDefinition />
@@ -26,148 +31,131 @@
                        Text="Settings" />
         </StackPanel>
 
-        <DockPanel Grid.Row="1">
+        <ScrollViewer Grid.Row="1">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                           Text="Snapping" />
+                <Separator DockPanel.Dock="Top" />
 
-            <TextBlock DockPanel.Dock="Top"
-                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                       Text="Snapping" />
-            <Separator DockPanel.Dock="Top" />
-
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="SnappingLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Text="Table positioning " />
-                <materialDesign:NumericUpDown Grid.Column="1"
+                <materialDesign:NumericUpDown Margin="{StaticResource Spacing}"
+                                              materialDesign:HintAssist.Hint="Table positioning"
+                                              DockPanel.Dock="Top"
                                               Maximum="50"
                                               Minimum="1"
+                                              Style="{StaticResource MaterialDesignFilledNumericUpDown}"
                                               Value="{Binding PositionRounding}" />
-            </Grid>
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="SnappingLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Text="Table size" />
-                <materialDesign:NumericUpDown Grid.Column="1"
+
+                <materialDesign:NumericUpDown Margin="{StaticResource Spacing}"
+                                              materialDesign:HintAssist.Hint="SnappingLabel"
+                                              DockPanel.Dock="Top"
                                               Maximum="50"
                                               Minimum="1"
+                                              Style="{StaticResource MaterialDesignFilledNumericUpDown}"
                                               Value="{Binding SizeRounding}" />
-            </Grid>
 
+                <TextBlock Margin="0,20,0,0"
+                           DockPanel.Dock="Top"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                           Text="Other" />
+                <Separator DockPanel.Dock="Top" />
 
-            <TextBlock Margin="0,20,0,0"
-                       DockPanel.Dock="Top"
-                       Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                       Text="Other" />
-            <Separator DockPanel.Dock="Top" />
-
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Text="Line thickness " />
-                <materialDesign:NumericUpDown Grid.Column="1"
+                <materialDesign:NumericUpDown Margin="{StaticResource Spacing}"
+                                              materialDesign:HintAssist.Hint="Line thickness"
+                                              DockPanel.Dock="Top"
                                               Maximum="50"
                                               Minimum="1"
+                                              Style="{StaticResource MaterialDesignFilledNumericUpDown}"
                                               Value="{Binding LineThickness}" />
-            </Grid>
 
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <DockPanel Margin="{StaticResource Spacing}"
+                           DockPanel.Dock="Top"
+                           LastChildFill="False">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Autodetect PK/FK" />
+                        <Grid VerticalAlignment="Center"
+                              Background="Transparent"
+                              ToolTip="If enabled, automatically flags a newly added column as primary key if the name equals 'ID', as foreign key if the name contains 'FK' and assigns the type 'int'.">
+                            <materialDesign:PackIcon Kind="Info" />
+                        </Grid>
+                    </StackPanel>
+                    <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding AutodetectKeys}" />
+                </DockPanel>
 
-                    <TextBlock VerticalAlignment="Center" Text="Autodetect PK/FK " />
-                    <Grid VerticalAlignment="Center"
-                          Background="Transparent"
-                          ToolTip="If enabled, automatically flags a newly added column as primary key if the name equals 'ID', as foreign key if the name contains 'FK' and assigns the type 'int'.">
-                        <materialDesign:PackIcon Kind="Info" />
-                    </Grid>
-                </StackPanel>
-                <ToggleButton Grid.Column="1" IsChecked="{Binding AutodetectKeys}" />
-            </Grid>
-
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"
-                           VerticalAlignment="Center"
-                           Text="Dark mode " />
-                <ToggleButton Grid.Column="1"
-                              Content="{materialDesign:PackIcon Kind=WhiteBalanceSunny}"
-                              IsChecked="{Binding IsDarkModeEnabled}">
-                    <materialDesign:ToggleButtonAssist.OnContent>
-                        <materialDesign:PackIcon Kind="WeatherNight" />
-                    </materialDesign:ToggleButtonAssist.OnContent>
-                </ToggleButton>
-            </Grid>
-
-            <Grid Margin="10,0,0,0" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" SharedSizeGroup="OtherLabel" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal">
-
-                    <TextBlock VerticalAlignment="Center" Text="Duplicate warning" />
-                    <Grid VerticalAlignment="Center"
-                          Background="Transparent"
-                          ToolTip="If enabled, warn when having two tables or columns with the same name.">
-                        <materialDesign:PackIcon Kind="Info" />
-                    </Grid>
-                </StackPanel>
-                <ToggleButton Grid.Column="1" IsChecked="{Binding WarnForDuplicates}" />
-            </Grid>
+                <DockPanel Margin="{StaticResource Spacing}"
+                           DockPanel.Dock="Top"
+                           LastChildFill="False">
+                    <TextBlock VerticalAlignment="Center"
+                               DockPanel.Dock="Left"
+                               Text="Dark mode " />
+                    <ToggleButton Content="{materialDesign:PackIcon Kind=WhiteBalanceSunny}"
+                                  DockPanel.Dock="Right"
+                                  IsChecked="{Binding IsDarkModeEnabled}">
+                        <materialDesign:ToggleButtonAssist.OnContent>
+                            <materialDesign:PackIcon Kind="WeatherNight" />
+                        </materialDesign:ToggleButtonAssist.OnContent>
+                    </ToggleButton>
+                </DockPanel>
 
 
-            <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           FontSize="24"
-                           Text="Download new version" />
+                <DockPanel Margin="{StaticResource Spacing}"
+                           DockPanel.Dock="Top"
+                           LastChildFill="False">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Duplicate warning" />
+                        <Grid VerticalAlignment="Center"
+                              Background="Transparent"
+                              ToolTip="If enabled, warn when having two tables or columns with the same name.">
+                            <materialDesign:PackIcon Kind="Info" />
+                        </Grid>
+                    </StackPanel>
+                    <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding WarnForDuplicates}" />
+                </DockPanel>
 
-                <TextBlock Grid.Row="1"
-                           Grid.Column="0"
-                           Text="Check for a new version. If available, it will download, and you can restart the app to apply the changes."
-                           TextWrapping="Wrap" />
+                <Grid Margin="0,16,0,0"
+                      HorizontalAlignment="Stretch"
+                      DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="1"
-                            Grid.Column="1"
-                            Orientation="Horizontal">
-                    <Button Command="{Binding CheckForUpdatesUpdateCommand}" Content="Check for updates" />
-                    <Button Margin="4,0,0,0"
-                            Command="{Binding ApplyUpdateAndRestartCommand}"
-                            Content="Install update"
-                            Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <StackPanel Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2">
+                        <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Download new version" />
+                        <Separator DockPanel.Dock="Top" />
+                    </StackPanel>
 
-                </StackPanel>
-            </Grid>
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"
+                               Text="Check for a new version. If available, it will download, and you can restart the app to apply the changes."
+                               TextWrapping="Wrap" />
 
-        </DockPanel>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Orientation="Horizontal">
+                        <Button Command="{Binding CheckForUpdatesUpdateCommand}" Content="Check for updates" />
+                        <Button Margin="4,0,0,0"
+                                Command="{Binding ApplyUpdateAndRestartCommand}"
+                                Content="Install update"
+                                Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <DockPanel Grid.Row="2" LastChildFill="False">
+                    </StackPanel>
+                </Grid>
+
+            </DockPanel>
+        </ScrollViewer>
+
+        <DockPanel Grid.Row="2"
+                   Margin="0,16,0,0"
+                   LastChildFill="False">
 
             <Button Command="{Binding RestoreDefaultsCommand}"
                     Content="Restore defaults"

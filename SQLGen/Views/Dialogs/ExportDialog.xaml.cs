@@ -17,15 +17,15 @@ using System.Windows.Shapes;
 
 namespace SQLGen.Views.Dialogs
 {
-    /// <summary>
-    /// Interaction logic for ExportDialog.xaml
-    /// </summary>
-    public partial class ExportDialog : UserControl
-    {
-        public ExportDialog()
-        {
-            InitializeComponent();
-            this.DataContext = App.ServiceProvider.GetRequiredService<ExportViewModel>();
-        }
-    }
+	/// <summary>
+	/// Interaction logic for ExportDialog.xaml
+	/// </summary>
+	public partial class ExportDialog : UserControl
+	{
+		public ExportDialog()
+		{
+			InitializeComponent();
+			//this.DataContext = App.ServiceProvider.GetRequiredService<ExportViewModel>();
+		}
+	}
 }

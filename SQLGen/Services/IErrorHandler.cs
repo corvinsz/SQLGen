@@ -24,7 +24,7 @@ public class ErrorHandler : IErrorHandler
 		_snackbarMessageQueue.Enqueue($"Error: {exception.Message}", "Details", () =>
 		{
 			var errorModel = new ErrorModel("Error", exception.ToString());
-			_dialogService.ShowMessageDialog(new Views.Dialogs.ErrorHandlerDialog(errorModel));
+			_dialogService.Show(new Views.Dialogs.ErrorHandlerDialog(errorModel));
 		});
 	}
 }

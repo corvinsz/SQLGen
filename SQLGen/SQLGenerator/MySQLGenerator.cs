@@ -1,4 +1,5 @@
-﻿using SQLGen.ViewModels;
+﻿using SQLGen.Models;
+using SQLGen.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

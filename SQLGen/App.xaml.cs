@@ -1,4 +1,6 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SQLGen.Helpers;
@@ -56,19 +58,24 @@ public partial class App : Application
 		.ConfigureServices((hostContext, services) =>
 		{
 			// Services
-			services.AddSingleton<IThemeService, ThemeService>();
-			services.AddSingleton<IInputFileHandler, InputFileHandler>();
+			//services.AddSingleton<IThemeService, ThemeService>();
 			services.AddSingleton<IDialogService, DialogService>();
 			services.AddSingleton<IErrorHandler, ErrorHandler>();
-			services.AddSingleton<IDuplicateChecker, DuplicateChecker>();
 
 			// Views & ViewModels
+			services.AddSingleton<MainViewModel>();
 			services.AddSingleton<MainWindow>();
-			services.AddSingleton<MainWindowViewModel>();
-			services.AddSingleton<SettingsView>();
-			services.AddSingleton<SettingsViewModel>();
-			services.AddSingleton<HomeView>();
-			services.AddSingleton<HomeViewModel>();
+
+			services.AddSingleton<SettingsViewModel>(sp =>
+			{
+				var messageQueue = sp.GetRequiredService<ISnackbarMessageQueue>();
+				var errorHandler = sp.GetRequiredService<IErrorHandler>();
+				return new SettingsViewModel("settings.json", messageQueue, errorHandler);
+			});
+			services.AddSingleton<Views.Dialogs.SettingsDialog>();
+
+			services.AddSingleton<ExportViewModel>();
+			services.AddSingleton<Views.Dialogs.ExportDialog>();
 
 			services.AddSingleton<WeakReferenceMessenger>();
 			services.AddSingleton<IMessenger, WeakReferenceMessenger>(provider => provider.GetRequiredService<WeakReferenceMessenger>());

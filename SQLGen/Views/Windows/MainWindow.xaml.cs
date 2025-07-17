@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SQLGen.Helpers;
 using SQLGen.Models;
+using SQLGen.Services;
 using SQLGen.ViewModels;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -15,14 +16,16 @@ public partial class MainWindow : Window
 {
 	private readonly MainViewModel _viewModel;
 	private readonly ISnackbarMessageQueue _messageQueue;
+	private readonly IDialogService _dialogService;
 
-	public MainWindow(ISnackbarMessageQueue messageQueue)
+	public MainWindow(MainViewModel viewModel, ISnackbarMessageQueue messageQueue, IDialogService dialogService)
 	{
 		InitializeComponent();
 		//_viewModel = new MainViewModel(new SnackbarMessageService(mainSnackbar.MessageQueue));
-		_viewModel = App.ServiceProvider.GetRequiredService<MainViewModel>();
+		//_viewModel = App.ServiceProvider.GetRequiredService<MainViewModel>();
 		_messageQueue = messageQueue;
-		DataContext = _viewModel;
+		_dialogService = dialogService;
+		DataContext = _viewModel = viewModel;
 	}
 
 	private void TableControl_PreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
@@ -51,10 +54,10 @@ public partial class MainWindow : Window
 
 	private async void Settings_Click(object sender, RoutedEventArgs e)
 	{
-		var settingsDialog = new Views.Dialogs.SettingsDialog();
-		await DialogHost.Show(settingsDialog, "RootDialog");
-		var settings = App.ServiceProvider.GetRequiredService<SettingsViewModel>();
-		await settings.SaveAsync();
+		var settingsView = App.Services.GetRequiredService<Views.Dialogs.SettingsDialog>();
+		await _dialogService.Show(settingsView, "RootDialog");
+		//var settings = App.ServiceProvider.GetRequiredService<SettingsViewModel>();
+		//await settings.SaveAsync();
 	}
 
 	private void btnResizeTables_Click(object sender, RoutedEventArgs e)

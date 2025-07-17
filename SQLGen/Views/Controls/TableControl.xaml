@@ -19,7 +19,7 @@
     <UserControl.ContextMenu>
         <!--<ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.(ap:DataContextAssist.DataContextEx)}">-->
         <ContextMenu>
-            <MenuItem Command="{Binding RenameCommand}">
+            <MenuItem Command="{Binding DataContext.RenameCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .}">
                 <MenuItem.Header>
                     <DockPanel>
                         <materialDesign:PackIcon DockPanel.Dock="Right" Kind="Pen" />
@@ -27,7 +27,7 @@
                     </DockPanel>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Command="{Binding AddConnectionCommand}">
+            <MenuItem Command="{Binding DataContext.AddConnectionCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .}">
                 <MenuItem.Header>
                     <DockPanel>
                         <materialDesign:PackIcon DockPanel.Dock="Right" Kind="TransitConnectionVariant" />

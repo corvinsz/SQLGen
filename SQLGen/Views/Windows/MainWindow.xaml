@@ -7,6 +7,7 @@
         xmlns:localControls="clr-namespace:SQLGen.Views.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:SQLGen.Models"
         xmlns:viewModels="clr-namespace:SQLGen.ViewModels"
         x:Name="outerWindow"
         Title="SQLGen"
@@ -118,10 +119,10 @@
                                         <Thumb.Style>
                                             <Style TargetType="Thumb">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:Table}">
+                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type models:Table}">
                                                         <Setter Property="Template" Value="{StaticResource TableTemplate}" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type viewModels:Line}">
+                                                    <DataTrigger Binding="{Binding SelfType}" Value="{x:Type models:Line}">
                                                         <Setter Property="Template" Value="{StaticResource LineTemplate}" />
                                                     </DataTrigger>
 
