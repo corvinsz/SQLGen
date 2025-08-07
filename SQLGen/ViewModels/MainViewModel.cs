@@ -97,31 +97,29 @@ public partial class MainViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	private void DeleteSelectedItem()
+	private async Task DeleteSelectedItem()
 	{
 		if (SelectedTable is null)
 		{
 			return;
 		}
 
-		var result = MessageBox.Show("Do you want to delete the selected item?", "Delete item", MessageBoxButton.YesNo);
-		if (result == MessageBoxResult.No)
+		var result = (MessageBoxResult?)await _dialogService.Show(new Views.Dialogs.MessageBoxDialog("Delete item", "Do you want to delete the selected item?", MessageBoxButton.YesNo), "RootDialog");
+		if (result == MessageBoxResult.Yes)
 		{
-			return;
-		}
+			if (SelectedTable is Table table)
+			{
+				table.DeleteConnections(Tables);
+			}
 
-		if (SelectedTable is Table table)
-		{
-			table.DeleteConnections(Tables);
+			Tables.Remove(SelectedTable);
 		}
-
-		Tables.Remove(SelectedTable);
 	}
 
 	[RelayCommand]
 	private async Task AddTable()
 	{
-		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x));
+		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(string.Empty, x => !string.IsNullOrWhiteSpace(x), "Table name");
 		var result = await _dialogService.Show(textInputControl, "RootDialog");
 
 		if (result is not string newTableName)
@@ -202,7 +200,7 @@ public partial class MainViewModel : ObservableObject
 	private async Task Rename(INameable nameable)
 	{
 		var textInputControl = new Views.Dialogs.SimpleTextInputDialog(nameable.Name, x => !string.IsNullOrWhiteSpace(x));
-		var result = await DialogHost.Show(textInputControl, "RootDialog");
+		var result = await _dialogService.Show(textInputControl, "RootDialog");
 
 		if (result is not string resultString)
 		{
@@ -216,7 +214,7 @@ public partial class MainViewModel : ObservableObject
 	{
 		string message = $"There are multiple tables with the name '{duplicateTable.Name}'.";
 		var duplicateWarningDialog = new Views.Dialogs.DuplicateWarningDialog(() => UndoAddTables(duplicateTable), message);
-		await DialogHost.Show(duplicateWarningDialog, "RootDialog");
+		await _dialogService.Show(duplicateWarningDialog, "RootDialog");
 	}
 
 	private void UndoAddTables(Table tableToRemove)
@@ -227,7 +225,7 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private async Task ShowExportDialog()
 	{
-		await DialogHost.Show(new Views.Dialogs.ExportDialog(), "RootDialog");
+		await _dialogService.Show(new Views.Dialogs.ExportDialog(), "RootDialog");
 	}
 
 	[RelayCommand]
@@ -250,10 +248,10 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private async Task ShowReleaseNotes()
 	{
-		if (DialogHost.IsDialogOpen("RootDialog"))
-		{
-			DialogHost.Close("RootDialog");
-		}
-		await DialogHost.Show(_releaseNotesDialog.Value, "RootDialog");
+		//if (DialogHost.IsDialogOpen("RootDialog"))
+		//{
+		//	DialogHost.Close("RootDialog");
+		//}
+		await _dialogService.Show(_releaseNotesDialog.Value, "RootDialog");
 	}
 }

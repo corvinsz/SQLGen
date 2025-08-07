@@ -32,7 +32,10 @@
     </Window.Resources>
 
 
-    <materialDesign:DialogHost CloseOnClickAway="True" Identifier="RootDialog">
+    <materialDesign:DialogHost CloseOnClickAway="True"
+                               DialogContentUniformCornerRadius="16"
+                               Identifier="RootDialog"
+                               Style="{StaticResource MaterialDesignEmbeddedDialogHost}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80" />

@@ -19,13 +19,16 @@ namespace SQLGen.Views.Dialogs;
 /// </summary>
 public partial class SimpleTextInputDialog : UserControl
 {
-    private readonly Predicate<string> _validator;
-    public SimpleTextInputDialog(string initialTextValue = null, Predicate<string> validator = null)
+    private readonly Predicate<string>? _validator;
+    public SimpleTextInputDialog(string? initialTextValue = null,
+                                 Predicate<string>? validator = null,
+                                 string hintText = "Text")
     {
         InitializeComponent();
         _validator = validator;
         btnOk.IsEnabled = false;
-        tbInput.Text = initialTextValue;
+        tbInput.SetCurrentValue(MaterialDesignThemes.Wpf.HintAssist.HintProperty, hintText);
+		tbInput.Text = initialTextValue;
 
         if (initialTextValue?.Length > 0)
         {

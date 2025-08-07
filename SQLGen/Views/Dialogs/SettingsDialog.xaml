@@ -85,6 +85,20 @@
                 <DockPanel Margin="{StaticResource Spacing}"
                            DockPanel.Dock="Top"
                            LastChildFill="False">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Duplicate warning" />
+                        <Grid VerticalAlignment="Center"
+                              Background="Transparent"
+                              ToolTip="If enabled, warn when having two tables or columns with the same name.">
+                            <materialDesign:PackIcon Kind="Info" />
+                        </Grid>
+                    </StackPanel>
+                    <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding WarnForDuplicates}" />
+                </DockPanel>
+
+                <DockPanel Margin="{StaticResource Spacing}"
+                           DockPanel.Dock="Top"
+                           LastChildFill="False">
                     <TextBlock VerticalAlignment="Center"
                                DockPanel.Dock="Left"
                                Text="Dark mode " />
@@ -98,19 +112,7 @@
                 </DockPanel>
 
 
-                <DockPanel Margin="{StaticResource Spacing}"
-                           DockPanel.Dock="Top"
-                           LastChildFill="False">
-                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="Duplicate warning" />
-                        <Grid VerticalAlignment="Center"
-                              Background="Transparent"
-                              ToolTip="If enabled, warn when having two tables or columns with the same name.">
-                            <materialDesign:PackIcon Kind="Info" />
-                        </Grid>
-                    </StackPanel>
-                    <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding WarnForDuplicates}" />
-                </DockPanel>
+
 
                 <Grid Margin="0,16,0,0"
                       HorizontalAlignment="Stretch"
